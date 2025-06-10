@@ -42,31 +42,43 @@
         </div>
         @endif
 
-        <!-- Balance Information -->
-        @if(isset($todayBalance) && $todayBalance)
+        <!-- Soldes du jour -->
+        @if($todayBalance)
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
             <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                 <i class="fas fa-wallet mr-2 text-green-600"></i>
-                Soldes du jour
+                Soldes du jour - Vue unifiée ({{ $balanceData['last_update'] }})
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="text-center p-4 bg-blue-50 rounded-lg">
                     <p class="text-sm font-medium text-gray-600">Caisse</p>
-                    <p class="text-2xl font-semibold text-blue-600">{{ number_format($todayBalance->cash_balance, 0) }} FCFA</p>
+                    <p class="text-2xl font-semibold text-blue-600">{{ number_format($balanceData['cash_balance'], 0) }} FCFA</p>
                 </div>
                 <div class="text-center p-4 bg-green-50 rounded-lg">
                     <p class="text-sm font-medium text-gray-600">Wizall</p>
-                    <p class="text-2xl font-semibold {{ $todayBalance->wizall_current_balance < 50000 ? 'text-red-600' : 'text-green-600' }}">
-                        {{ number_format($todayBalance->wizall_current_balance, 0) }} FCFA
+                    <p class="text-2xl font-semibold {{ $balanceData['wizall_current_balance'] < 50000 ? 'text-red-600' : 'text-green-600' }}">
+                        {{ number_format($balanceData['wizall_current_balance'], 0) }} FCFA
                     </p>
                 </div>
                 <div class="text-center p-4 bg-purple-50 rounded-lg">
                     <p class="text-sm font-medium text-gray-600">Wave</p>
-                    <p class="text-2xl font-semibold text-purple-600">{{ number_format($todayBalance->wave_final_balance, 0) }} FCFA</p>
+                    <p class="text-2xl font-semibold text-purple-600">{{ number_format($balanceData['wave_final_balance'], 0) }} FCFA</p>
                 </div>
                 <div class="text-center p-4 bg-orange-50 rounded-lg">
                     <p class="text-sm font-medium text-gray-600">Orange Money</p>
-                    <p class="text-2xl font-semibold text-orange-600">{{ number_format($todayBalance->orange_money_balance, 0) }} FCFA</p>
+                    <p class="text-2xl font-semibold text-orange-600">{{ number_format($balanceData['orange_money_balance'], 0) }} FCFA</p>
+                </div>
+            </div>
+            
+            <!-- Informations additionnelles pour les agents -->
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="text-center p-4 bg-red-50 rounded-lg">
+                    <p class="text-sm font-medium text-gray-600">À Rendre Total</p>
+                    <p class="text-2xl font-semibold text-red-600">{{ number_format($balanceData['agent_return_amount'], 0) }} FCFA</p>
+                </div>
+                <div class="text-center p-4 bg-indigo-50 rounded-lg">
+                    <p class="text-sm font-medium text-gray-600">Versements Aujourd'hui</p>
+                    <p class="text-2xl font-semibold text-indigo-600">{{ $balanceData['deposits_summary']['deposits_count'] }}</p>
                 </div>
             </div>
         </div>

@@ -6,58 +6,191 @@
         <style>
     .gradient-hero {
         background: linear-gradient(135deg, #1e40af 0%, #3730a3 50%, #581c87 100%);
+        position: relative;
+        overflow: hidden;
     }
+    
+    .gradient-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><circle cx="30" cy="30" r="4"/></g></svg>');
+        opacity: 0.3;
+    }
+    
     .text-gradient {
-                background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .hero-glow {
+        box-shadow: 0 0 50px rgba(250, 204, 21, 0.5);
+        animation: glow-pulse 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow-pulse {
+        from {
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
+        }
+        to {
+            box-shadow: 0 0 40px rgba(250, 204, 21, 0.8);
+        }
+    }
+    
+    .floating-icon {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .floating-icon:nth-child(2) {
+        animation-delay: -2s;
+    }
+    
+    .floating-icon:nth-child(3) {
+        animation-delay: -4s;
+    }
+    
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+            opacity: 0.1;
+        }
+        50% {
+            transform: translateY(-20px) rotate(180deg);
+            opacity: 0.2;
+        }
+    }
+    
+    .hero-card {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #fbbf24;
+        border-radius: 50%;
+        animation: sparkle 3s linear infinite;
+    }
+    
+    @keyframes sparkle {
+        0%, 100% {
+            opacity: 0;
+            transform: scale(0);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
     /* Configuration Tailwind pour les classes personnalisées */
     .border-3 {
         border-width: 3px;
-        }
+    }
         </style>
 
 <!-- Hero Section -->
-<section class="gradient-hero text-white py-20 relative overflow-hidden">
-    <!-- Decorative elements -->
-    <div class="absolute top-20 left-10 animate-floating">
-        <i class="fas fa-file-invoice text-white text-6xl opacity-10"></i>
-                    </div>
-    <div class="absolute bottom-20 right-10 animate-floating" style="animation-delay: 1s;">
-        <i class="fas fa-mobile-alt text-white text-6xl opacity-10"></i>
-                </div>
+<section class="gradient-hero text-white py-20 relative overflow-hidden min-h-screen flex items-center">
+    <!-- Floating decorative elements -->
+    <div class="floating-icon absolute top-20 left-10">
+        <i class="fas fa-file-invoice text-white text-6xl"></i>
+    </div>
+    <div class="floating-icon absolute bottom-20 right-10">
+        <i class="fas fa-mobile-alt text-white text-6xl"></i>
+    </div>
+    <div class="floating-icon absolute top-1/3 right-1/4">
+        <i class="fas fa-credit-card text-white text-4xl"></i>
+    </div>
+    <div class="floating-icon absolute bottom-1/3 left-1/4">
+        <i class="fas fa-shield-alt text-white text-4xl"></i>
+    </div>
+    
+    <!-- Sparkles -->
+    <div class="sparkle" style="top: 15%; left: 20%; animation-delay: 0s;"></div>
+    <div class="sparkle" style="top: 25%; right: 25%; animation-delay: 1s;"></div>
+    <div class="sparkle" style="bottom: 30%; left: 30%; animation-delay: 2s;"></div>
+    <div class="sparkle" style="bottom: 20%; right: 15%; animation-delay: 0.5s;"></div>
+    <div class="sparkle" style="top: 40%; left: 60%; animation-delay: 1.5s;"></div>
                 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        <h1 class="text-5xl md:text-7xl font-bold mb-6">
-            Faites vous remarquer !
-        </h1>
-        
-        <blockquote class="text-xl md:text-2xl mb-8 italic font-light opacity-90">
-            "C'est dans les moments de décision que votre destinée se dessine."
-            <br>
-            <span class="text-lg">- Tony Robbins</span>
-        </blockquote>
-        
-        <div class="mb-12">
-            <a href="{{ route('bills.create') }}" class="bg-yellow-400 text-gray-900 px-12 py-6 rounded-xl text-xl font-bold hover:bg-yellow-300 transition transform hover:scale-105 shadow-2xl animate-pulse-glow">
-                <i class="fas fa-bolt mr-3"></i>PAYER MA FACTURE
-            </a>
-                </div>
-        
-        <div class="grid md:grid-cols-3 gap-8 text-lg">
-            <div class="flex items-center justify-center space-x-3">
-                <i class="fas fa-phone text-2xl text-yellow-400"></i>
-                <span>+221 78 705 67 67</span>
-            </div>
-            <div class="flex items-center justify-center space-x-3">
-                <i class="fas fa-envelope text-2xl text-yellow-400"></i>
-                <span>diarrabicons@gmail.com</span>
-                    </div>
+        <!-- Logo/Brand Enhanced -->
+        <div class="mb-8">
+            <div class="inline-flex items-center space-x-4 hero-card px-8 py-4 rounded-2xl">
+                <img src="{{ asset('images/logobi.png') }}" alt="B!consulting Logo" class="h-16 w-auto">
+                <div>
+                    <span class="text-4xl font-bold text-white">Bifi</span>
+                    <p class="text-yellow-300 text-sm font-medium">by B!consulting</p>
                 </div>
             </div>
         </div>
+        
+        <h1 class="text-6xl md:text-8xl font-bold mb-8 leading-tight">
+            <span class="block mb-4">Faites vous</span>
+            <span class="text-yellow-300 text-stroke">remarquer !</span>
+        </h1>
+        
+        <div class="hero-card px-8 py-6 rounded-2xl mb-8 max-w-4xl mx-auto">
+            <blockquote class="text-xl md:text-2xl italic font-light">
+                "C'est dans les moments de décision que votre destinée se dessine."
+                <br>
+                <span class="text-yellow-300 text-lg font-medium">- Tony Robbins</span>
+            </blockquote>
+        </div>
+        
+        <div class="mb-12">
+            <a href="{{ route('bills.create') }}" class="inline-block bg-yellow-400 text-gray-900 px-12 py-6 rounded-2xl text-xl font-bold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 hero-glow uppercase tracking-wide">
+                <i class="fas fa-bolt mr-3"></i>PAYER MA FACTURE
+                <i class="fas fa-arrow-right ml-3"></i>
+            </a>
+        </div>
+        
+        <!-- Enhanced Contact Info -->
+        <div class="grid md:grid-cols-3 gap-8 text-lg max-w-4xl mx-auto">
+            <div class="hero-card px-6 py-4 rounded-xl flex items-center justify-center space-x-3 transform hover:scale-105 transition-all duration-300">
+                <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
+                    <i class="fas fa-phone text-xl text-gray-900"></i>
+                </div>
+                <div class="text-left">
+                    <p class="text-yellow-300 text-sm font-medium">Appelez-nous</p>
+                    <span class="font-semibold">+221 78 705 67 67</span>
+                </div>
+            </div>
+            <div class="hero-card px-6 py-4 rounded-xl flex items-center justify-center space-x-3 transform hover:scale-105 transition-all duration-300">
+                <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
+                    <i class="fas fa-envelope text-xl text-gray-900"></i>
+                </div>
+                <div class="text-left">
+                    <p class="text-yellow-300 text-sm font-medium">Écrivez-nous</p>
+                    <span class="font-semibold">diarrabicons@gmail.com</span>
+                </div>
+            </div>
+            <div class="hero-card px-6 py-4 rounded-xl flex items-center justify-center space-x-3 transform hover:scale-105 transition-all duration-300">
+                <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
+                    <i class="fas fa-map-marker-alt text-xl text-gray-900"></i>
+                </div>
+                <div class="text-left">
+                    <p class="text-yellow-300 text-sm font-medium">Visitez-nous</p>
+                    <span class="font-semibold">Mermoz, Dakar</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <div class="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+                <div class="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+            </div>
+        </div>
+    </div>
+</section>
 
         <!-- Section avec images -->
         <div class="py-20 bg-gradient-to-r from-gray-50 to-blue-50">

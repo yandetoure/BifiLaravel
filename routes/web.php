@@ -13,6 +13,7 @@ use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ClientChatController;
 use App\Http\Controllers\ThirdPartyPaymentController;
+use App\Http\Controllers\DepositController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,10 +41,17 @@ Route::middleware('auth')->group(function () {
     // Routes pour les factures (tous les utilisateurs connectés)
     Route::get('/bills/{bill}', [BillController::class, 'show'])->name('bills.show');
     
+    // Routes pour les clients - Mes factures et reçus
+    Route::prefix('my')->name('my.')->group(function () {
+        Route::get('/bills', [BillController::class, 'myBills'])->name('bills');
+        Route::get('/receipts', [ReceiptController::class, 'myReceipts'])->name('receipts');
+        Route::get('/payments', [PaymentController::class, 'myPayments'])->name('payments');
+    });
+    
     // Routes pour les agents et superviseurs seulement
     Route::patch('/bills/{bill}/status', [BillController::class, 'updateStatus'])->name('bills.updateStatus');
     
-    // Routes pour les paiements
+    // Routes pour les paiements - Accessible aux clients pour leurs propres factures et aux agents/superviseurs
     Route::get('/payments/create/{bill}', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
     Route::get('/payments/{payment}/success', [PaymentController::class, 'success'])->name('payments.success');
@@ -81,6 +89,22 @@ Route::middleware('auth')->group(function () {
     Route::prefix('uploads')->name('uploads.')->group(function () {
         Route::post('/chat-file', [\App\Http\Controllers\FileUploadController::class, 'uploadChatFile'])->name('chat-file');
         Route::delete('/file', [\App\Http\Controllers\FileUploadController::class, 'deleteFile'])->name('delete-file');
+    });
+    
+    // Routes pour les versements - Système unifié
+    Route::prefix('deposits')->name('deposits.')->group(function () {
+        Route::get('/', [DepositController::class, 'index'])->name('index');
+        Route::get('/history', [DepositController::class, 'history'])->name('history');
+        Route::get('/stats', [DepositController::class, 'getStats'])->name('stats');
+        
+        // Versements selon les rôles
+        Route::post('/agent-deposit', [DepositController::class, 'agentDeposit'])->name('agent-deposit');
+        Route::post('/supervisor-deposit', [DepositController::class, 'supervisorDeposit'])->name('supervisor-deposit');
+        Route::post('/cash-collection', [DepositController::class, 'cashCollection'])->name('cash-collection');
+        Route::post('/wizall-refill', [DepositController::class, 'wizallRefill'])->name('wizall-refill');
+        
+        // Admin uniquement
+        Route::post('/reset-balance', [DepositController::class, 'resetBalance'])->name('reset-balance')->middleware('admin');
     });
 });
 
@@ -134,12 +158,12 @@ Route::middleware(['auth'])->prefix('supervisor')->name('supervisor.')->group(fu
 });
 
 // Routes d'administration - Protégées par le middleware admin
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'supervisor.or.admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard admin
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
     
-    // Gestion des utilisateurs
-    Route::prefix('users')->name('users.')->group(function () {
+    // Gestion des utilisateurs - ADMIN UNIQUEMENT
+    Route::middleware('admin')->prefix('users')->name('users.')->group(function () {
         Route::get('/', [AdminController::class, 'users'])->name('index');
         Route::get('/create', [AdminController::class, 'createUser'])->name('create');
         Route::post('/', [AdminController::class, 'storeUser'])->name('store');
@@ -202,8 +226,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('/export-custom', [AdminController::class, 'exportCustomReport'])->name('export-custom');
     });
     
-    // Configuration système
-    Route::prefix('settings')->name('settings.')->group(function () {
+    // Configuration système - ADMIN UNIQUEMENT  
+    Route::middleware('admin')->prefix('settings')->name('settings.')->group(function () {
         Route::get('/', [AdminController::class, 'settings'])->name('index');
         Route::patch('/general', [AdminController::class, 'updateGeneralSettings'])->name('general');
         Route::patch('/payment-methods', [AdminController::class, 'updatePaymentMethods'])->name('payment-methods');

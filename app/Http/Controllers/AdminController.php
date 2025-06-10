@@ -32,45 +32,41 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
+        // Utiliser la vue unifiée des balances pour cohérence
+        $balanceData = Balance::getUnifiedBalanceView();
+        $todayBalance = Balance::getTodayBalance();
         
-        // Vérifier les permissions admin
-        if ($user->role !== 'admin') {
-            return redirect()->route('user.dashboard')->with('error', 'Accès non autorisé.');
+        // Statistiques du jour
+        $today = today();
+        $todayBills = Bill::whereDate('created_at', $today)->count();
+        $todayPayments = Payment::whereDate('created_at', $today)->count();
+        $todayRevenue = Payment::whereDate('created_at', $today)->sum('amount');
+        $pendingBills = Bill::where('status', 'pending')->count();
+        
+        // Agents actifs
+        $activeAgents = User::where('role', 'agent')->count();
+        $activeSupervisors = User::where('role', 'supervisor')->count();
+        
+        // Alertes système
+        $alerts = [];
+        if ($todayBalance && $todayBalance->wizall_current_balance < 50000) {
+            $alerts[] = [
+                'type' => 'warning',
+                'message' => 'Solde Wizall critique: ' . number_format($todayBalance->wizall_current_balance, 0) . ' FCFA'
+            ];
         }
-
-        $stats = [
-            'total_bills' => Bill::count(),
-            'pending_bills' => Bill::where('status', 'pending')->count(),
-            'confirmed_bills' => Bill::where('status', 'confirmed')->count(),
-            'paid_bills' => Bill::where('status', 'paid')->count(),
-            'total_payments' => Payment::count(),
-            'completed_payments' => Payment::where('status', 'completed')->count(),
-            'total_users' => User::count(),
-            'total_agents' => User::where('role', 'agent')->count(),
-            'total_clients' => User::where('role', 'client')->count(),
-            'recent_payments' => Payment::with(['bill.company', 'agent'])
-                ->orderBy('created_at', 'desc')
-                ->take(10)
-                ->get(),
-            'recent_bills' => Bill::with(['company', 'user'])
-                ->orderBy('created_at', 'desc')
-                ->take(10)
-                ->get(),
-        ];
-
-        // Calculs financiers
-        $totalRevenue = Payment::where('status', 'completed')->sum('total');
-        $monthlyRevenue = Payment::where('status', 'completed')
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-            ->sum('total');
-
-        $stats['total_revenue'] = $totalRevenue;
-        $stats['monthly_revenue'] = $monthlyRevenue;
-
-        return view('admin.dashboard', compact('stats'));
+        
+        return view('dashboard.admin', compact(
+            'balanceData',
+            'todayBalance',
+            'todayBills',
+            'todayPayments',
+            'todayRevenue',
+            'pendingBills',
+            'activeAgents',
+            'activeSupervisors',
+            'alerts'
+        ));
     }
 
     public function users()

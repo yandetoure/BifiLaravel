@@ -26,6 +26,9 @@ class SupervisorController extends Controller
         }
 
         $today = today();
+        
+        // Utiliser la vue unifiée des balances
+        $balanceData = Balance::getUnifiedBalanceView();
         $todayBalance = Balance::getTodayBalance();
         
         // Statistiques du jour
@@ -59,6 +62,7 @@ class SupervisorController extends Controller
         
         return view('dashboard.supervisor', compact(
             'todayBalance',
+            'balanceData',
             'todayRevenue',
             'todayFees',
             'todayProfit',

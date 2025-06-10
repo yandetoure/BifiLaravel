@@ -28,7 +28,8 @@ class AgentController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         
-        // Récupérer les balances du jour
+        // Utiliser la vue unifiée des balances
+        $balanceData = Balance::getUnifiedBalanceView();
         $todayBalance = Balance::getTodayBalance();
         
         // Statistiques des factures
@@ -63,7 +64,8 @@ class AgentController extends Controller
 
         return view('dashboard.agent', compact(
             'bills',
-            'todayBalance', 
+            'todayBalance',
+            'balanceData',
             'todayStats',
             'pendingBills', 
             'recentPayments'

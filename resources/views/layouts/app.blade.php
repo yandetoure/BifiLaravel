@@ -126,10 +126,25 @@
                                     </div>
                                 </div>
                             @else
-                                <!-- Support Client - Pour les clients seulement -->
-                                <a href="{{ route('client-chat.index') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
-                                    <i class="fas fa-life-ring mr-2"></i>Support Client
-                                </a>
+                                <!-- Menu Client -->
+                                <div class="relative">
+                                    <button onclick="toggleClientDropdown()" class="flex items-center space-x-2 text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
+                                        <i class="fas fa-user mr-2"></i>
+                                        <span>Mon Espace</span>
+                                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                    </button>
+                                    <div id="clientDropdown" class="hidden absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                        <a href="{{ route('my.bills') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <i class="fas fa-file-invoice mr-2"></i>Mes Factures
+                                        </a>
+                                        <a href="{{ route('my.receipts') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <i class="fas fa-receipt mr-2"></i>Mes Reçus
+                                        </a>
+                                        <a href="{{ route('client-chat.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <i class="fas fa-life-ring mr-2"></i>Support Client
+                                        </a>
+                                    </div>
+                                </div>
                             @endif
                             
                             @if(Auth::user()->role === 'admin' || Auth::user()->role === 'supervisor')
@@ -145,15 +160,20 @@
                                             <i class="fas fa-tachometer-alt mr-2"></i>Dashboard Admin
                                         </a>
                                         <div class="border-t border-gray-100"></div>
+                                        <a href="{{ route('deposits.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <i class="fas fa-money-bill-transfer mr-2"></i>Gestion Versements
+                                        </a>
                                         <a href="{{ route('admin.bills.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <i class="fas fa-file-invoice mr-2"></i>Gestion Factures
                                         </a>
                                         <a href="{{ route('admin.payments.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <i class="fas fa-credit-card mr-2"></i>Gestion Paiements
                                         </a>
+                                        @if(Auth::user()->role === 'admin')
                                         <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <i class="fas fa-users mr-2"></i>Gestion Utilisateurs
                                         </a>
+                                        @endif
                                         <div class="border-t border-gray-100"></div>
                                         <a href="{{ route('admin.balances.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <i class="fas fa-wallet mr-2"></i>Gestion Balances
@@ -331,9 +351,15 @@
                                 </a>
                             </div>
                         @else
-                            <!-- Support Client Mobile - Pour les clients seulement -->
+                            <!-- Menu Client Mobile -->
                             <div class="border-t border-gray-200 pt-2">
-                                <p class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wide">Support</p>
+                                <p class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wide">Mon Espace Client</p>
+                                <a href="{{ route('my.bills') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+                                    <i class="fas fa-file-invoice mr-2"></i>Mes Factures
+                                </a>
+                                <a href="{{ route('my.receipts') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+                                    <i class="fas fa-receipt mr-2"></i>Mes Reçus
+                                </a>
                                 <a href="{{ route('client-chat.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                                     <i class="fas fa-life-ring mr-2"></i>Support Client
                                 </a>
@@ -347,15 +373,20 @@
                                 <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                                     <i class="fas fa-tachometer-alt mr-2"></i>Dashboard Admin
                                 </a>
+                                <a href="{{ route('deposits.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+                                    <i class="fas fa-money-bill-transfer mr-2"></i>Gestion Versements
+                                </a>
                                 <a href="{{ route('admin.bills.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                                     <i class="fas fa-file-invoice mr-2"></i>Gestion Factures
                                 </a>
                                 <a href="{{ route('admin.payments.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                                     <i class="fas fa-credit-card mr-2"></i>Gestion Paiements
                                 </a>
+                                @if(Auth::user()->role === 'admin')
                                 <a href="{{ route('admin.users.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                                     <i class="fas fa-users mr-2"></i>Gestion Utilisateurs
                                 </a>
+                                @endif
                                 <a href="{{ route('admin.balances.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                                     <i class="fas fa-wallet mr-2"></i>Gestion Balances
                                 </a>
@@ -542,9 +573,26 @@
             // Fermer les autres dropdowns
             const userDropdown = document.getElementById('userDropdown');
             const communicationDropdown = document.getElementById('communicationDropdown');
+            const clientDropdown = document.getElementById('clientDropdown');
             const notificationsDropdown = document.getElementById('notificationsDropdown');
             if (userDropdown) userDropdown.classList.add('hidden');
             if (communicationDropdown) communicationDropdown.classList.add('hidden');
+            if (clientDropdown) clientDropdown.classList.add('hidden');
+            if (notificationsDropdown) notificationsDropdown.classList.add('hidden');
+        }
+        
+        function toggleClientDropdown() {
+            const dropdown = document.getElementById('clientDropdown');
+            dropdown.classList.toggle('hidden');
+            
+            // Fermer les autres dropdowns
+            const userDropdown = document.getElementById('userDropdown');
+            const communicationDropdown = document.getElementById('communicationDropdown');
+            const adminDropdown = document.getElementById('adminDropdown');
+            const notificationsDropdown = document.getElementById('notificationsDropdown');
+            if (userDropdown) userDropdown.classList.add('hidden');
+            if (communicationDropdown) communicationDropdown.classList.add('hidden');
+            if (adminDropdown) adminDropdown.classList.add('hidden');
             if (notificationsDropdown) notificationsDropdown.classList.add('hidden');
         }
         
@@ -571,12 +619,14 @@
             const userDropdown = document.getElementById('userDropdown');
             const communicationDropdown = document.getElementById('communicationDropdown');
             const adminDropdown = document.getElementById('adminDropdown');
+            const clientDropdown = document.getElementById('clientDropdown');
             const notificationsDropdown = document.getElementById('notificationsDropdown');
             
             if (!event.target.closest('.relative')) {
                 if (userDropdown) userDropdown.classList.add('hidden');
                 if (communicationDropdown) communicationDropdown.classList.add('hidden');
                 if (adminDropdown) adminDropdown.classList.add('hidden');
+                if (clientDropdown) clientDropdown.classList.add('hidden');
                 if (notificationsDropdown) notificationsDropdown.classList.add('hidden');
             }
         });

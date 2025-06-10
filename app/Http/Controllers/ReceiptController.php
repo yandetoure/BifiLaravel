@@ -7,6 +7,7 @@ use App\Models\Receipt;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ReceiptController extends Controller
 {
@@ -103,5 +104,30 @@ class ReceiptController extends Controller
         $pdf = Pdf::loadView('receipts.pdf', $data);
         
         return $pdf->output();
+    }
+
+    /**
+     * Afficher les reçus du client connecté
+     */
+    public function myReceipts()
+    {
+        $user = Auth::user();
+        
+        // Récupérer les reçus via les paiements des factures du client
+        $receipts = Receipt::whereHas('payment.bill', function($query) use ($user) {
+            $query->where(function($subQuery) use ($user) {
+                $subQuery->where('client_name', $user->name)
+                         ->orWhere('phone', $user->phone);
+                
+                // Si l'utilisateur a un email, chercher aussi par email dans les détails
+                if ($user->email) {
+                    $subQuery->orWhere('client_name', 'like', '%' . $user->email . '%');
+                }
+            });
+        })->with(['payment.bill.company'])
+          ->orderBy('created_at', 'desc')
+          ->paginate(10);
+
+        return view('receipts.my-receipts', compact('receipts'));
     }
 }

@@ -115,4 +115,26 @@ class BillController extends Controller
 
         return response()->json($bills);
     }
+
+    /**
+     * Afficher les factures du client connecté
+     */
+    public function myBills()
+    {
+        $user = Auth::user();
+        $bills = Bill::where(function($query) use ($user) {
+                        $query->where('client_name', $user->name)
+                              ->orWhere('phone', $user->phone);
+                        
+                        // Si l'utilisateur a un email, chercher aussi par email dans les détails
+                        if ($user->email) {
+                            $query->orWhere('client_name', 'like', '%' . $user->email . '%');
+                        }
+                    })
+                    ->with(['company', 'payments.receipt'])
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
+
+        return view('bills.my-bills', compact('bills'));
+    }
 }

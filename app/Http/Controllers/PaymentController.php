@@ -18,9 +18,26 @@ class PaymentController extends Controller
 {
     public function create(Bill $bill)
     {
-        // Toutes les factures non payées peuvent maintenant être payées
+        // Vérifier que la facture peut être payée
         if ($bill->isPaid()) {
             return redirect()->back()->with('error', 'Cette facture a déjà été payée.');
+        }
+        
+        // Pour les clients, vérifier qu'ils peuvent payer leur propre facture
+        if (Auth::check() && Auth::user()->role === 'client') {
+            $user = Auth::user();
+            $canPay = $bill->client_name === $user->name || 
+                     $bill->phone === $user->phone ||
+                     ($user->email && strpos($bill->client_name, $user->email) !== false);
+            
+            if (!$canPay) {
+                return redirect()->back()->with('error', 'Vous ne pouvez payer que vos propres factures.');
+            }
+            
+            // Les clients ne peuvent payer que les factures confirmées
+            if (!$bill->isConfirmed()) {
+                return redirect()->back()->with('error', 'Cette facture doit être confirmée avant le paiement.');
+            }
         }
 
         return view('payments.create', compact('bill'));
@@ -350,5 +367,30 @@ class PaymentController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * Afficher les paiements du client connecté
+     */
+    public function myPayments()
+    {
+        $user = Auth::user();
+        
+        // Récupérer les paiements via les factures du client
+        $payments = Payment::whereHas('bill', function($query) use ($user) {
+            $query->where(function($subQuery) use ($user) {
+                $subQuery->where('client_name', $user->name)
+                         ->orWhere('phone', $user->phone);
+                
+                // Si l'utilisateur a un email, chercher aussi par email dans les détails
+                if ($user->email) {
+                    $subQuery->orWhere('client_name', 'like', '%' . $user->email . '%');
+                }
+            });
+        })->with(['bill.company', 'receipt'])
+          ->orderBy('created_at', 'desc')
+          ->paginate(10);
+
+        return view('payments.my-payments', compact('payments'));
     }
 }
