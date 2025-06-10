@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1); 
 
 namespace App\Models;
 
@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,5 +45,57 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relations
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
+
+    public function paymentsAsAgent()
+    {
+        return $this->hasMany(Payment::class, 'agent_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    // Helper methods
+    public function isAgent()
+    {
+        return $this->role === 'agent';
+    }
+
+    public function isSupervisor()
+    {
+        return $this->role === 'supervisor';
+    }
+
+    public function isClient()
+    {
+        return $this->role === 'client';
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function canManageAll()
+    {
+        return $this->isAdmin() || $this->isSupervisor();
+    }
+
+    public function canDelete()
+    {
+        return $this->isAdmin();
+    }
+
+    public function canArchive()
+    {
+        return !$this->isClient();
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1); 
 
 namespace App\Http\Controllers\Auth;
 
@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
