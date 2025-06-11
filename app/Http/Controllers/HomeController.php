@@ -6,6 +6,7 @@ use App\Models\Bill;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -33,19 +34,27 @@ class HomeController extends Controller
     public function dashboard()
     {
         /** @var User|null $user */
-        $user = auth()->user();
+        $user = Auth::user();
 
         if ($user && ($user->isAgent() || $user->isSupervisor())) {
-            // Dashboard pour agent/superviseur
-            $bills = Bill::with(['company', 'user'])
-                ->orderBy('created_at', 'desc')
-                ->paginate(10);
-            
-            return view('dashboard.agent', compact('bills'));
+            // Rediriger vers le dashboard approprié
+            if ($user->isAgent()) {
+                return redirect()->route('agent.dashboard');
+            } elseif ($user->isSupervisor()) {
+                return redirect()->route('supervisor.dashboard');
+            }
         }
 
-        // Dashboard pour client
-        $userBills = $user ? $user->bills()->with('company')->orderBy('created_at', 'desc')->get() : collect();
+        if ($user && $user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        // Dashboard pour client - récupérer les factures par nom/phone
+        $userBills = $user ? Bill::where(function($query) use ($user) {
+            $query->where('client_name', $user->name)
+                  ->orWhere('phone', $user->phone);
+        })->with('company')->orderBy('created_at', 'desc')->get() : collect();
+        
         return view('dashboard.client', compact('userBills'));
     }
 }
