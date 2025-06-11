@@ -104,7 +104,7 @@
         </div>
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a href="{{ route('third-party.form') }}" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-200">
+                <a href="{{ route('bills.third-party.form') }}" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-200">
                     <div class="flex-shrink-0 mr-3">
                         <div class="p-2 bg-orange-100 rounded-lg">
                             <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
