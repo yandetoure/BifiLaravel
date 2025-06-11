@@ -18,7 +18,7 @@ class AdminUserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@bifi.com'],
             [
-                'name' => 'Administrateur BIFI',
+                'name' => 'Ndeye Yandé Touré',
                 'email' => 'admin@bifi.com',
                 'password' => Hash::make('admin123'),
                 'role' => 'admin',
@@ -30,7 +30,7 @@ class AdminUserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'superviseur@bifi.com'],
             [
-                'name' => 'Superviseur Test',
+                'name' => 'Mame Diarra Touré',
                 'email' => 'superviseur@bifi.com',
                 'password' => Hash::make('supervisor123'),
                 'role' => 'supervisor',
@@ -42,7 +42,7 @@ class AdminUserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'agent@bifi.com'],
             [
-                'name' => 'Agent Test',
+                'name' => 'Astou 1',
                 'email' => 'agent@bifi.com',
                 'password' => Hash::make('agent123'),
                 'role' => 'agent',
