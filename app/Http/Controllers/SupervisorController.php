@@ -56,7 +56,7 @@ class SupervisorController extends Controller
         if ($todayBalance && $todayBalance->wizall_current_balance < 50000) {
             $alerts[] = [
                 'type' => 'warning',
-                'message' => 'Solde Wizall bas: ' . number_format($todayBalance->wizall_current_balance, 0) . ' FCFA'
+                'message' => 'Solde Wizall critique: ' . number_format((float) $todayBalance->wizall_current_balance, 0) . ' FCFA'
             ];
         }
         
