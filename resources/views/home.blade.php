@@ -470,7 +470,7 @@
                              class="w-12 h-12 rounded-full object-cover mr-4">
                         <div>
                             <h4 class="font-bold text-gray-900">Aïssatou Diop</h4>
-                            <p class="text-gray-500 text-sm">Commerçante</p>
+                            <p class="text-gray-500 text-sm">Transitaire</p>
                         </div>
                     </div>
                 </div>
@@ -520,7 +520,7 @@
                              class="w-12 h-12 rounded-full object-cover mr-4">
                         <div>
                             <h4 class="font-bold text-gray-900">Fatou Fall</h4>
-                            <p class="text-gray-500 text-sm">Importateur</p>
+                            <p class="text-gray-500 text-sm">Importatrice</p>
                         </div>
                     </div>
                 </div>
