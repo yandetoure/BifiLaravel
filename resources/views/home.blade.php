@@ -201,7 +201,7 @@
                 <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Nos services exceptionnels</h2>
                 <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Découvrez comment Bifi simplifie vos transactions financières quotidiennes
+                    Découvrez comment BiFi simplifie vos transactions financières quotidiennes
                 </p>
             </div>
             
@@ -661,8 +661,8 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <div class="flex items-center space-x-2 mb-4">
-                        <div class="bitcoin-logo">B</div>
-                        <span class="text-white text-2xl font-bold">Bifi</span>
+                        <div class="bitcoin-logo">₿</div>
+                        <span class="text-white text-2xl font-bold">₿ifi</span>
                     </div>
                     <p class="text-gray-400">
                         La solution de paiement innovante pour faciliter vos transactions quotidiennes.
