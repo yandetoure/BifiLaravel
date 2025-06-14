@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bifi - Faites vous remarquer !</title>
+    <title>BiFi - Faites vous remarquer !</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -171,7 +171,7 @@
             </h1>
             
             <p class="text-xl md:text-2xl text-white max-w-3xl mx-auto mb-10">
-                Bifi révolutionne vos transactions avec une solution rapide, sécurisée et accessible à tous.
+                BifF révolutionne vos transactions avec une solution rapide, sécurisée et accessible à tous.
             </p>
             
             <div class="flex flex-col sm:flex-row justify-center gap-4">
@@ -235,7 +235,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-3">Accessibilité</h3>
                     <p class="text-gray-600">
-                        Utilisez Bifi depuis votre smartphone, tablette ou ordinateur.
+                        Utilisez BiFi depuis votre smartphone, tablette ou ordinateur.
                     </p>
                 </div>
                 
@@ -361,7 +361,7 @@
                     <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">Qui sommes-nous ?</h2>
                     <div class="w-20 h-1 bg-primary mb-6"></div>
                     <p class="text-gray-600 mb-6 text-lg">
-                        Bifi est une solution de paiement innovante développée par B!consulting, conçue pour simplifier vos transactions financières quotidiennes.
+                        BiFi est une solution de paiement innovante développée par B!consulting, conçue pour simplifier vos transactions financières quotidiennes.
                     </p>
                     <p class="text-gray-600 mb-6 text-lg">
                         Notre mission est de rendre les paiements plus accessibles, plus rapides et plus sécurisés pour tous, en utilisant les dernières technologies disponibles.
@@ -402,7 +402,7 @@
                 <div class="order-1 lg:order-2">
                     <div class="relative">
                         <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" 
-                             alt="Équipe Bifi" 
+                             alt="Équipe BiFi" 
                              class="rounded-xl shadow-xl w-full h-auto">
                         <div class="absolute -bottom-6 -left-6 bg-primary p-6 rounded-xl shadow-lg z-10">
                             <h3 class="text-white text-2xl font-bold">5 ans</h3>
@@ -462,15 +462,15 @@
                         </div>
                     </div>
                     <p class="text-gray-600 mb-6 italic">
-                        "Bifi a révolutionné la façon dont je gère mes paiements. Tout est si simple et rapide maintenant !"
+                        "BiFi a révolutionné la façon dont je gère mes paiements. Tout est si simple et rapide maintenant !"
                     </p>
                     <div class="flex items-center">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" 
+                        <img src="https://www.soinsdebene.com/wp-content/uploads/2016/04/visage-femme-noire-soinsdebene.jpg" 
                              alt="Client satisfait" 
                              class="w-12 h-12 rounded-full object-cover mr-4">
                         <div>
                             <h4 class="font-bold text-gray-900">Aïssatou Diop</h4>
-                            <p class="text-gray-500 text-sm">Entrepreneure</p>
+                            <p class="text-gray-500 text-sm">Commerçante</p>
                         </div>
                     </div>
                 </div>
@@ -485,12 +485,12 @@
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                         </div>
-                    </div>
+                    </div>  
                     <p class="text-gray-600 mb-6 italic">
-                        "La sécurité des transactions était ma principale préoccupation. Avec Bifi, je suis totalement rassuré."
+                        "La sécurité des transactions était ma principale préoccupation. Avec BiFi, je suis totalement rassuré."
                     </p>
                     <div class="flex items-center">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" 
+                        <img src="https://img.freepik.com/photos-gratuite/homme-affaires-afro-americain-costume-gris-studio-portrait_53876-102940.jpg?semt=ais_hybrid&w=740" 
                              alt="Client satisfait" 
                              class="w-12 h-12 rounded-full object-cover mr-4">
                         <div>
@@ -515,12 +515,12 @@
                         "Le support client est exceptionnel. Ils répondent rapidement et résolvent tous mes problèmes."
                     </p>
                     <div class="flex items-center">
-                        <img src="https://randomuser.me/api/portraits/women/63.jpg" 
+                        <img src="https://france-fraternites.org/wp-content/uploads/2017/06/halima-aden-article-ff.jpg" 
                              alt="Client satisfait" 
                              class="w-12 h-12 rounded-full object-cover mr-4">
                         <div>
                             <h4 class="font-bold text-gray-900">Fatou Fall</h4>
-                            <p class="text-gray-500 text-sm">Professionnelle</p>
+                            <p class="text-gray-500 text-sm">Importateur</p>
                         </div>
                     </div>
                 </div>
@@ -533,7 +533,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-6">Prêt à simplifier vos paiements ?</h2>
             <p class="text-xl mb-8 max-w-2xl mx-auto">
-                Rejoignez des milliers d'utilisateurs qui font confiance à Bifi pour leurs transactions quotidiennes.
+                Rejoignez des milliers d'utilisateurs qui font confiance à BiFi pour leurs transactions quotidiennes.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="#" class="bg-white text-primary px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors">
@@ -705,7 +705,7 @@
             
             <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-400">
-                    &copy; 2023 Bifi by B!consulting. Tous droits réservés.
+                    &copy; 2023 BiFi by NYT. Tous droits réservés.
                 </p>
                 <div class="flex space-x-6 mt-4 md:mt-0">
                     <a href="#" class="text-gray-400 hover:text-white transition-colors">
