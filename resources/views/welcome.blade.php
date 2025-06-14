@@ -191,6 +191,85 @@
             </div>
         </div>
 
+        <!-- Section Moyens de Paiement -->
+        <section id="payment-methods" class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        Nos Moyens de Paiement
+                    </h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        Choisissez le mode de paiement qui vous convient le mieux parmi nos solutions sécurisées
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Carte Bancaire -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 transform hover:scale-105 transition-transform duration-300">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-credit-card text-2xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Carte Bancaire</h3>
+                        <p class="text-gray-600 mb-4">
+                            Paiement sécurisé par carte bancaire avec cryptage SSL et protection 3D Secure
+                        </p>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Visa, Mastercard, UBA
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Transaction instantanée
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Mobile Money -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 transform hover:scale-105 transition-transform duration-300">
+                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-mobile-alt text-2xl text-orange-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Mobile Money</h3>
+                        <p class="text-gray-600 mb-4">
+                            Payez facilement avec votre mobile money, disponible 24/7
+                        </p>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Wave, Orange Money, Free Money
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Confirmation SMS
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Espèces -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 transform hover:scale-105 transition-transform duration-300">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-money-bill-wave text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Paiement en Espèces</h3>
+                        <p class="text-gray-600 mb-4">
+                            Payez en espèces dans nos points de service agréés
+                        </p>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Réseau d'agents certifiés
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                Reçu immédiat
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Section avec images -->
         <div class="py-20 bg-gradient-to-r from-gray-50 to-blue-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

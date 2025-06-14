@@ -1,536 +1,776 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bifi - Faites vous remarquer !</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#eb6d19',
+                        secondary: '#5aa9a4',
+                        tertiary: '#007590',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .navbar-scroll {
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero-overlay {
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background-color: #128C7E;
+        }
+        
+        .bitcoin-logo {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            background: #5aa9a4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 0 10px rgba(235, 109, 25, 0.5);
+        }
+        
+        .bitcoin-logo::after {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px dashed rgba(235, 109, 25, 0.5);
+            border-radius: 50%;
+            animation: spin 20s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-900">
+    <!-- WhatsApp Float Button -->
+    <a href="https://wa.me/221787056767" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-@section('title', 'Accueil - Faites vous remarquer !')
-
-@section('content')
-        <style>
-    .gradient-hero {
-        background: linear-gradient(135deg, #1e40af 0%, #3730a3 50%, #581c87 100%);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .gradient-hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><circle cx="30" cy="30" r="4"/></g></svg>');
-        opacity: 0.3;
-    }
-    
-    .text-gradient {
-        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    
-    .hero-glow {
-        box-shadow: 0 0 50px rgba(250, 204, 21, 0.5);
-        animation: glow-pulse 2s ease-in-out infinite alternate;
-    }
-    
-    @keyframes glow-pulse {
-        from {
-            box-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
-        }
-        to {
-            box-shadow: 0 0 40px rgba(250, 204, 21, 0.8);
-        }
-    }
-    
-    .floating-icon {
-        animation: float 6s ease-in-out infinite;
-    }
-    
-    .floating-icon:nth-child(2) {
-        animation-delay: -2s;
-    }
-    
-    .floating-icon:nth-child(3) {
-        animation-delay: -4s;
-    }
-    
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0px) rotate(0deg);
-            opacity: 0.1;
-        }
-        50% {
-            transform: translateY(-20px) rotate(180deg);
-            opacity: 0.2;
-        }
-    }
-    
-    .hero-card {
-        backdrop-filter: blur(10px);
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .sparkle {
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        background: #fbbf24;
-        border-radius: 50%;
-        animation: sparkle 3s linear infinite;
-    }
-    
-    @keyframes sparkle {
-        0%, 100% {
-            opacity: 0;
-            transform: scale(0);
-        }
-        50% {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-    
-    /* Configuration Tailwind pour les classes personnalisées */
-    .border-3 {
-        border-width: 3px;
-    }
-        </style>
-
-<!-- Hero Section -->
-<section class="gradient-hero text-white py-20 relative overflow-hidden min-h-screen flex items-center">
-    <!-- Floating decorative elements -->
-    <div class="floating-icon absolute top-20 left-10">
-        <i class="fas fa-file-invoice text-white text-6xl"></i>
-    </div>
-    <div class="floating-icon absolute bottom-20 right-10">
-        <i class="fas fa-mobile-alt text-white text-6xl"></i>
-    </div>
-    <div class="floating-icon absolute top-1/3 right-1/4">
-        <i class="fas fa-credit-card text-white text-4xl"></i>
-    </div>
-    <div class="floating-icon absolute bottom-1/3 left-1/4">
-        <i class="fas fa-shield-alt text-white text-4xl"></i>
-    </div>
-    
-    <!-- Sparkles -->
-    <div class="sparkle" style="top: 15%; left: 20%; animation-delay: 0s;"></div>
-    <div class="sparkle" style="top: 25%; right: 25%; animation-delay: 1s;"></div>
-    <div class="sparkle" style="bottom: 30%; left: 30%; animation-delay: 2s;"></div>
-    <div class="sparkle" style="bottom: 20%; right: 15%; animation-delay: 0.5s;"></div>
-    <div class="sparkle" style="top: 40%; left: 60%; animation-delay: 1.5s;"></div>
-                
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        <!-- Logo/Brand Enhanced -->
-        <div class="mb-8">
-            <div class="inline-flex items-center space-x-4 hero-card px-8 py-4 rounded-2xl">
-                <img src="{{ asset('images/logobi.png') }}" alt="B!consulting Logo" class="h-16 w-auto">
-                <div>
-                    <span class="text-4xl font-bold text-white">Bifi</span>
-                    <p class="text-yellow-300 text-sm font-medium">by B!consulting</p>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <div class="flex items-center space-x-2">
+                        <div class="bitcoin-logo">₿</div>
+                        <span class="text-white text-2xl font-bold">₿iFi</span>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-8">
+                        <a href="#accueil" class="text-white hover:text-primary px-3 py-2 rounded-md text-lg font-medium transition-colors">Accueil</a>
+                        <a href="#services" class="text-white hover:text-primary px-3 py-2 rounded-md text-lg font-medium transition-colors">Services</a>
+                        <a href="#about" class="text-white hover:text-primary px-3 py-2 rounded-md text-lg font-medium transition-colors">À propos</a>
+                        <a href="#contact" class="text-white hover:text-primary px-3 py-2 rounded-md text-lg font-medium transition-colors">Contact</a>
+                        <a href="{{ route('bills.create') }}" class="bg-secondary text-white px-6 py-2 rounded-lg text-lg font-semibold hover:bg-opacity-90">Payer une facture</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
         
-        <h1 class="text-6xl md:text-8xl font-bold mb-8 leading-tight">
-            <span class="block mb-4">Faites vous</span>
-            <span class="text-yellow-300 text-stroke">remarquer !</span>
-        </h1>
-        
-        <div class="hero-card px-8 py-6 rounded-2xl mb-8 max-w-4xl mx-auto">
-            <blockquote class="text-xl md:text-2xl italic font-light">
-                "C'est dans les moments de décision que votre destinée se dessine."
-                <br>
-                <span class="text-yellow-300 text-lg font-medium">- Tony Robbins</span>
-            </blockquote>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-black bg-opacity-90">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#accueil" class="text-white block px-3 py-2 rounded-md text-base font-medium">Accueil</a>
+                <a href="#services" class="text-white block px-3 py-2 rounded-md text-base font-medium">Services</a>
+                <a href="#about" class="text-white block px-3 py-2 rounded-md text-base font-medium">À propos</a>
+                <a href="#contact" class="text-white block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+                <a href="{{ route('bills.create') }}" class="bg-secondary text-white block px-3 py-2 rounded-md text-base font-medium mt-2">Payer une facture</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden" id>
+        <!-- Background image with overlay -->
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+                 alt="Équipe de collaborateurs" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 hero-overlay"></div>
         </div>
         
-        <div class="mb-12">
-            <a href="{{ route('bills.create') }}" class="inline-block bg-yellow-400 text-gray-900 px-12 py-6 rounded-2xl text-xl font-bold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 hero-glow uppercase tracking-wide">
-                <i class="fas fa-bolt mr-3"></i>PAYER MA FACTURE
-                <i class="fas fa-arrow-right ml-3"></i>
-            </a>
-        </div>
-        
-        <!-- Enhanced Contact Info -->
-        <div class="grid md:grid-cols-3 gap-8 text-lg max-w-4xl mx-auto">
-            <div class="hero-card px-6 py-4 rounded-xl flex items-center justify-center space-x-3 transform hover:scale-105 transition-all duration-300">
-                <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-                    <i class="fas fa-phone text-xl text-gray-900"></i>
-                </div>
-                <div class="text-left">
-                    <p class="text-yellow-300 text-sm font-medium">Appelez-nous</p>
-                    <span class="font-semibold">+221 78 705 67 67</span>
-                </div>
-            </div>
-            <div class="hero-card px-6 py-4 rounded-xl flex items-center justify-center space-x-3 transform hover:scale-105 transition-all duration-300">
-                <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-                    <i class="fas fa-envelope text-xl text-gray-900"></i>
-                </div>
-                <div class="text-left">
-                    <p class="text-yellow-300 text-sm font-medium">Écrivez-nous</p>
-                    <span class="font-semibold">diarrabicons@gmail.com</span>
-                </div>
-            </div>
-            <div class="hero-card px-6 py-4 rounded-xl flex items-center justify-center space-x-3 transform hover:scale-105 transition-all duration-300">
-                <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-                    <i class="fas fa-map-marker-alt text-xl text-gray-900"></i>
-                </div>
-                <div class="text-left">
-                    <p class="text-yellow-300 text-sm font-medium">Visitez-nous</p>
-                    <span class="font-semibold">Mermoz, Dakar</span>
-                </div>
+        <!-- Hero content -->
+        <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
+                <span class="block">OPTIMISEZ !</span>
+                <span class="text-primary">DEMATERIALISEZ !</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-white max-w-3xl mx-auto mb-10">
+                Bifi révolutionne vos transactions avec une solution rapide, sécurisée et accessible à tous.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a  href="{{ route('bills.create') }}" class="bg-secondary text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-opacity-90 transition-colors">
+                    Payer une facture <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+                <a href="#services" class="bg-white text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors">
+                    Nos services <i class="fas fa-chevron-down ml-2"></i>
+                </a>
             </div>
         </div>
         
         <!-- Scroll indicator -->
-        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <div class="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-                <div class="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
-            </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#services" class="text-white">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </a>
         </div>
-    </div>
-</section>
+    </section>
 
-        <!-- Section avec images -->
-        <div class="py-20 bg-gradient-to-r from-gray-50 to-blue-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Une expérience moderne et sécurisée</h2>
-                    <p class="text-xl text-gray-600">Découvrez comment Bifi simplifie vos paiements</p>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div class="feature-image overflow-hidden rounded-2xl shadow-xl">
-                        <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                             alt="Interface moderne" 
-                             class="w-full h-80 object-cover transition-transform duration-300 hover:scale-110">
-                    </div>
-                    <div>
-                        <h3 class="text-3xl font-bold text-gray-900 mb-6">Interface intuitive</h3>
-                        <p class="text-lg text-gray-600 mb-6">
-                            Notre interface moderne et épurée vous permet de payer vos factures en quelques clics seulement.
-                        </p>
-                        <div class="space-y-3">
-                            <div class="flex items-center">
-                                <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Navigation simplifiée</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Design responsive</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Accessibilité optimale</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-20">
-                    <div class="order-2 lg:order-1">
-                        <h3 class="text-3xl font-bold text-gray-900 mb-6">Sécurité renforcée</h3>
-                        <p class="text-lg text-gray-600 mb-6">
-                            Toutes vos transactions sont protégées par les dernières technologies de cryptage et de sécurité.
-                        </p>
-                        <div class="space-y-3">
-                            <div class="flex items-center">
-                                <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Cryptage SSL 256 bits</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Authentification multi-facteurs</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11.166 4.12C9.67 4.542 8.367 5.406 7.414 6.578l2.586 2.586 4-4zm-1.332 7.88l-4-4a7.025 7.025 0 00-.572 2.284C5.262 12.542 7.593 14 10 14a4.977 4.977 0 00.834-.069z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Protection anti-fraude</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="order-1 lg:order-2 feature-image overflow-hidden rounded-2xl shadow-xl">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                             alt="Sécurité" 
-                             class="w-full h-80 object-cover transition-transform duration-300 hover:scale-110">
-                    </div>
-                </div>
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Nos services exceptionnels</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Découvrez comment Bifi simplifie vos transactions financières quotidiennes
+                </p>
             </div>
-        </div>
-
-        <!-- Fonctionnalités Section -->
-        <div id="features" class="py-20 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Pourquoi choisir Bifi ?</h2>
-                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Notre plateforme vous offre une expérience de paiement unique, sécurisée et accessible.
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mb-6 text-primary text-2xl">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Paiements instantanés</h3>
+                    <p class="text-gray-600">
+                        Effectuez vos transactions en quelques secondes seulement, sans délai d'attente.
                     </p>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div class="floating-card bg-white p-8 rounded-2xl shadow-lg text-center border border-gray-100">
-                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Simplicité</h3>
-                        <p class="text-gray-600">Interface intuitive et facile à utiliser pour tous</p>
+                
+                <!-- Service 2 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-16 h-16 bg-secondary bg-opacity-10 rounded-full flex items-center justify-center mb-6 text-secondary text-2xl">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
-
-                    <div class="floating-card bg-white p-8 rounded-2xl shadow-lg text-center border border-gray-100" style="animation-delay: 0.2s;">
-                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Sécurité</h3>
-                        <p class="text-gray-600">Transactions protégées par cryptage avancé</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Sécurité maximale</h3>
+                    <p class="text-gray-600">
+                        Vos transactions sont protégées par les dernières technologies de cryptage.
+                    </p>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-16 h-16 bg-tertiary bg-opacity-10 rounded-full flex items-center justify-center mb-6 text-tertiary text-2xl">
+                        <i class="fas fa-mobile-alt"></i>
                     </div>
-
-                    <div class="floating-card bg-white p-8 rounded-2xl shadow-lg text-center border border-gray-100" style="animation-delay: 0.4s;">
-                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Temps réel</h3>
-                        <p class="text-gray-600">Suivi instantané de vos paiements</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Accessibilité</h3>
+                    <p class="text-gray-600">
+                        Utilisez Bifi depuis votre smartphone, tablette ou ordinateur.
+                    </p>
+                </div>
+                
+                <!-- Service 4 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mb-6 text-primary text-2xl">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-
-                    <div class="floating-card bg-white p-8 rounded-2xl shadow-lg text-center border border-gray-100" style="animation-delay: 0.6s;">
-                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 100 19.5 9.75 9.75 0 000-19.5z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Support 24/7</h3>
-                        <p class="text-gray-600">Assistance disponible à tout moment</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Suivi en temps réel</h3>
+                    <p class="text-gray-600">
+                        Visualisez l'historique de vos transactions et suivez vos dépenses.
+                    </p>
+                </div>
+                
+                <!-- Service 5 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-16 h-16 bg-secondary bg-opacity-10 rounded-full flex items-center justify-center mb-6 text-secondary text-2xl">
+                        <i class="fas fa-headset"></i>
                     </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Support 24/7</h3>
+                    <p class="text-gray-600">
+                        Notre équipe est disponible à tout moment pour vous aider.
+                    </p>
+                </div>
+                
+                <!-- Service 6 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="w-16 h-16 bg-tertiary bg-opacity-10 rounded-full flex items-center justify-center mb-6 text-tertiary text-2xl">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Multiples options</h3>
+                    <p class="text-gray-600">
+                        Payez avec Wave, Orange Money, Wizall ou espèces selon votre préférence.
+                    </p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Services supportés -->
-        <div class="py-20 bg-gradient-to-r from-blue-50 to-purple-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Méthodes de paiement acceptées</h2>
-                    <p class="text-xl text-gray-600">Payez avec votre méthode préférée</p>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    <div class="text-center p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
-                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="font-semibold text-gray-900 mb-2">Wave</h3>
-                        <p class="text-sm text-gray-600">Paiement mobile</p>
-                    </div>
-                    <div class="text-center p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
-                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="font-semibold text-gray-900 mb-2">Orange Money</h3>
-                        <p class="text-sm text-gray-600">Mobile banking</p>
-                    </div>
-                    <div class="text-center p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
-                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="font-semibold text-gray-900 mb-2">Wizall</h3>
-                        <p class="text-sm text-gray-600">Carte bancaire</p>
-                    </div>
-                    <div class="text-center p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
-                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="font-semibold text-gray-900 mb-2">Espèces</h3>
-                        <p class="text-sm text-gray-600">Paiement cash</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CTA Section -->
-        <div class="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-4xl font-bold mb-6">Prêt à simplifier vos paiements ?</h2>
-                <p class="text-xl mb-8 max-w-2xl mx-auto">
-                    Rejoignez des milliers d'utilisateurs qui font confiance à Bifi pour leurs transactions quotidiennes.
+    <!-- Section Moyens de Paiement -->
+    <section id="payment-methods" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Nos Moyens de Paiement</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Choisissez le mode de paiement qui vous convient le mieux parmi nos solutions sécurisées
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="{{ route('bills.create') }}" 
-                       class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors inline-block shadow-lg">
-                        Commencer maintenant
-                    </a>
-                    <a href="{{ route('about') }}" 
-                       class="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
-                        En savoir plus
-                    </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Carte Bancaire -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+                    <div class="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mb-6 text-primary text-2xl">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Carte Bancaire</h3>
+                    <p class="text-gray-600 mb-4">
+                        Paiement sécurisé par carte bancaire avec cryptage SSL et protection 3D Secure
+                    </p>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-primary mr-2"></i>
+                            Visa, Mastercard, UBA
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-primary mr-2"></i>
+                            Transaction instantanée
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Mobile Money -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+                    <div class="w-16 h-16 bg-secondary bg-opacity-10 rounded-full flex items-center justify-center mb-6 text-secondary text-2xl">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Mobile Money</h3>
+                    <p class="text-gray-600 mb-4">
+                        Payez facilement avec votre mobile money, disponible 24/7
+                    </p>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-secondary mr-2"></i>
+                            Wave, Orange Money, Free Money
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-secondary mr-2"></i>
+                            Confirmation SMS
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Espèces -->
+                <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+                    <div class="w-16 h-16 bg-tertiary bg-opacity-10 rounded-full flex items-center justify-center mb-6 text-tertiary text-2xl">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Paiement en Espèces</h3>
+                    <p class="text-gray-600 mb-4">
+                        Payez en espèces dans nos points de service agréés
+                    </p>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-tertiary mr-2"></i>
+                            Réseau d'agents certifiés
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-tertiary mr-2"></i>
+                            Reçu immédiat
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Contact Section -->
-        <div id="contact" class="py-20 bg-gray-900 text-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <div>
-                        <h2 class="text-3xl font-bold mb-6">Contactez-nous</h2>
-                        <p class="text-gray-300 mb-8">
-                            Notre équipe est là pour vous accompagner dans l'utilisation de Bifi.
-                        </p>
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">Qui sommes-nous ?</h2>
+                    <div class="w-20 h-1 bg-primary mb-6"></div>
+                    <p class="text-gray-600 mb-6 text-lg">
+                        Bifi est une solution de paiement innovante développée par B!consulting, conçue pour simplifier vos transactions financières quotidiennes.
+                    </p>
+                    <p class="text-gray-600 mb-6 text-lg">
+                        Notre mission est de rendre les paiements plus accessibles, plus rapides et plus sécurisés pour tous, en utilisant les dernières technologies disponibles.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                            </div>
+                            <p class="ml-3 text-gray-600">
+                                <span class="font-semibold">Expérience utilisateur</span> - Interface intuitive et facile à utiliser
+                            </p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                            </div>
+                            <p class="ml-3 text-gray-600">
+                                <span class="font-semibold">Sécurité</span> - Cryptage avancé pour protéger vos données
+                            </p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                            </div>
+                            <p class="ml-3 text-gray-600">
+                                <span class="font-semibold">Accessibilité</span> - Disponible sur tous vos appareils
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" 
+                             alt="Équipe Bifi" 
+                             class="rounded-xl shadow-xl w-full h-auto">
+                        <div class="absolute -bottom-6 -left-6 bg-primary p-6 rounded-xl shadow-lg z-10">
+                            <h3 class="text-white text-2xl font-bold">5 ans</h3>
+                            <p class="text-white">d'expérience</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="p-6">
+                    <div class="text-4xl font-bold mb-2">10K+</div>
+                    <p class="text-white text-opacity-90">Utilisateurs</p>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold mb-2">500K+</div>
+                    <p class="text-white text-opacity-90">Transactions</p>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold mb-2">99.9%</div>
+                    <p class="text-white text-opacity-90">Disponibilité</p>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold mb-2">24/7</div>
+                    <p class="text-white text-opacity-90">Support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Ce qu'ils disent de nous</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Découvrez les témoignages de nos clients satisfaits
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-xl">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6 italic">
+                        "Bifi a révolutionné la façon dont je gère mes paiements. Tout est si simple et rapide maintenant !"
+                    </p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" 
+                             alt="Client satisfait" 
+                             class="w-12 h-12 rounded-full object-cover mr-4">
+                        <div>
+                            <h4 class="font-bold text-gray-900">Aïssatou Diop</h4>
+                            <p class="text-gray-500 text-sm">Entrepreneure</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-xl">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6 italic">
+                        "La sécurité des transactions était ma principale préoccupation. Avec Bifi, je suis totalement rassuré."
+                    </p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" 
+                             alt="Client satisfait" 
+                             class="w-12 h-12 rounded-full object-cover mr-4">
+                        <div>
+                            <h4 class="font-bold text-gray-900">Mamadou Ndiaye</h4>
+                            <p class="text-gray-500 text-sm">Commerçant</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 text-xl">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6 italic">
+                        "Le support client est exceptionnel. Ils répondent rapidement et résolvent tous mes problèmes."
+                    </p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/63.jpg" 
+                             alt="Client satisfait" 
+                             class="w-12 h-12 rounded-full object-cover mr-4">
+                        <div>
+                            <h4 class="font-bold text-gray-900">Fatou Fall</h4>
+                            <p class="text-gray-500 text-sm">Professionnelle</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-primary text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-6">Prêt à simplifier vos paiements ?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">
+                Rejoignez des milliers d'utilisateurs qui font confiance à Bifi pour leurs transactions quotidiennes.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#" class="bg-white text-primary px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors">
+                    Commencer maintenant
+                </a>
+                <a href="#contact" class="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-primary transition-colors">
+                    Nous contacter
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Contactez-nous</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Notre équipe est là pour répondre à toutes vos questions
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-lg text-primary">
+                                <i class="fas fa-map-marker-alt text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-bold text-gray-900">Adresse</h3>
+                                <p class="text-gray-600">Mermoz, Dakar, Sénégal</p>
+                            </div>
+                        </div>
                         
-                        <div class="space-y-4">
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mr-4">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold">Adresse</h3>
-                                    <p class="text-gray-300">Mermoz Dakar, Sénégal<br>BP 15350 DAKAR-FANN</p>
-                                </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-lg text-primary">
+                                <i class="fas fa-phone-alt text-xl"></i>
                             </div>
-                            
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mr-4">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold">Téléphone</h3>
-                                    <p class="text-gray-300">+221 78 705 67 67</p>
-                                </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-bold text-gray-900">Téléphone</h3>
+                                <p class="text-gray-600">+221 78 705 67 67</p>
                             </div>
-                            
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mr-4">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold">Email</h3>
-                                    <p class="text-gray-300">diarrabicons@gmail.com</p>
-                                </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-lg text-primary">
+                                <i class="fas fa-envelope text-xl"></i>
                             </div>
-                            
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mr-4">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold">Horaires</h3>
-                                    <p class="text-gray-300">Lundi - Vendredi : 9h00 - 17h00</p>
-                                </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-bold text-gray-900">Email</h3>
+                                <p class="text-gray-600">diarrabicons@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-lg text-primary">
+                                <i class="fas fa-clock text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-bold text-gray-900">Horaires</h3>
+                                <p class="text-gray-600">Lundi - Vendredi : 8h00 - 18h00</p>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="bg-gray-800 p-8 rounded-lg">
-                        <h3 class="text-xl font-semibold mb-6">Démarrer avec Bifi</h3>
-                        <div class="space-y-4">
-                            <a href="{{ route('bills.create') }}" 
-                               class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                                Payer une facture
+                    <div class="mt-8">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Suivez-nous</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="bg-gray-100 p-3 rounded-full text-gray-700 hover:bg-primary hover:text-white transition-colors">
+                                <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="{{ route('about') }}" 
-                               class="block w-full border border-gray-600 text-white text-center py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors">
-                                En savoir plus
+                            <a href="#" class="bg-gray-100 p-3 rounded-full text-gray-700 hover:bg-primary hover:text-white transition-colors">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="bg-gray-100 p-3 rounded-full text-gray-700 hover:bg-primary hover:text-white transition-colors">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="bg-gray-100 p-3 rounded-full text-gray-700 hover:bg-primary hover:text-white transition-colors">
+                                <i class="fab fa-linkedin-in"></i>
                             </a>
                         </div>
                     </div>
                 </div>
+                
+                <div>
+                    <form class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="first-name" class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                                <input type="text" id="first-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                            </div>
+                            <div>
+                                <label for="last-name" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                                <input type="text" id="last-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Sujet</label>
+                            <input type="text" id="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-primary text-white px-6 py-4 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                                Envoyer le message
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
+    </section>
 
-        <!-- Footer personnalisé pour la page d'accueil -->
-        <footer class="bg-gray-800 text-gray-300 py-8">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <p>&copy; {{ date('Y') }} Bifi by B!consulting. Tous droits réservés.</p>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="bitcoin-logo">B</div>
+                        <span class="text-white text-2xl font-bold">Bifi</span>
+                    </div>
+                    <p class="text-gray-400">
+                        La solution de paiement innovante pour faciliter vos transactions quotidiennes.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Liens rapides</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Accueil</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">Services</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Paiements</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Transferts</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Factures</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Sécurité</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">
+                        Abonnez-vous pour recevoir nos dernières actualités.
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="Votre email" class="px-4 py-2 rounded-l-lg focus:outline-none text-gray-900 w-full">
+                        <button type="submit" class="bg-primary px-4 py-2 rounded-r-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
-        </footer>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400">
+                    &copy; 2023 Bifi by B!consulting. Tous droits réservés.
+                </p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-        <!-- JavaScript pour les effets d'animation -->
-        <script>
-            // Smooth scrolling pour les ancres
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('navbar-scroll');
+            } else {
+                navbar.classList.remove('navbar-scroll');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    mobileMenu.classList.add('hidden');
+                }
             });
-            
-            // Animation d'apparition au scroll
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
-            
-            document.addEventListener('DOMContentLoaded', () => {
-                const animatedElements = document.querySelectorAll('.floating-card');
-                animatedElements.forEach(el => {
-                    el.style.opacity = '0';
-                    el.style.transform = 'translateY(20px)';
-                    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                    observer.observe(el);
-                });
-            });
-        </script>
-
-@endsection 
+        });
+        
+        // Initialize navbar state
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('navbar-scroll');
+            }
+        });
+    </script>
+</body>
+</html>

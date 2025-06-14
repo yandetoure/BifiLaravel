@@ -5,10 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Bifi by B!consulting') - Paiement de Factures</title>
+    <title>@yield('title', '₿iFi by B!consulting') - Paiement de Factures</title>
 
-    <!-- Tailwind CSS CDN pour garantir l'application des styles -->
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link href="{{ asset('css/bitcoin-logo.css') }}" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- Configuration Tailwind personnalisée -->
     <script>
@@ -16,87 +27,40 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            200: '#bfdbfe',
-                            300: '#93c5fd',
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            800: '#1e40af',
-                            900: '#1e3a8a',
-                        }
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-in-out',
-                        'slide-up': 'slideUp 0.3s ease-out',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'floating': 'floating 3s ease-in-out infinite',
-                        'pulse-glow': 'pulse-glow 2s infinite'
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        slideUp: {
-                            '0%': { transform: 'translateY(10px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
-                        },
-                        floating: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-10px)' }
-                        },
-                        'pulse-glow': {
-                            '0%, 100%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)' },
-                            '50%': { boxShadow: '0 0 40px rgba(59, 130, 246, 0.8)' }
-                        }
+                        'bifi-orange': '#eb6d19',
+                        'bifi-turquoise': '#5aa9a4',
+                        'bifi-blue': '#007590',
                     }
                 }
             }
         }
     </script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Vite Assets - Backup -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    @stack('styles')
-    
-    <style>
-        .text-gradient {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+    <!-- Configuration Tailwind personnalisée -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bifi-orange': '#eb6d19',
+                        'bifi-turquoise': '#5aa9a4',
+                        'bifi-blue': '#007590',
+                    }
+                }
+            }
         }
-        /* Configuration Tailwind pour les classes personnalisées */
-        .border-3 {
-            border-width: 3px;
-        }
-    </style>
+    </script>
 </head>
-<body class="font-sans bg-gray-50 antialiased">
+<body class="font-sans antialiased">
     <div id="app" class="min-h-screen flex flex-col">
         <!-- Navigation -->
-        <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 navbar-transparent">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
                     <div class="flex items-center">
                         <a href="{{ route('home') }}" class="flex items-center space-x-3">
-                            <img src="{{ asset('images/logobi.png') }}" alt="B!consulting Logo" class="h-12 w-auto">
-                            <div>
-                                <span class="text-2xl font-bold text-gradient">Bifi</span>
-                                <p class="text-xs text-gray-500">by B!consulting</p>
-                            </div>
+                            <span class="bitcoin-logo">
+                                <span class="bitcoin-symbol">₿</span>iFi
+                            </span>
                         </a>
                     </div>
                 
@@ -156,10 +120,19 @@
                                         <i class="fas fa-chevron-down ml-1 text-xs"></i>
                                     </button>
                                     <div id="adminDropdown" class="hidden absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
-                                        <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard Admin
-                                        </a>
+                                        @if(Auth::user()->role === 'admin')
+                                            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                <i class="fas fa-tachometer-alt mr-2"></i>Dashboard Admin
+                                            </a>
+                                        @else
+                                            <a href="{{ route('supervisor.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                <i class="fas fa-tachometer-alt mr-2"></i>Dashboard Superviseur
+                                            </a>
+                                        @endif
+                                        
                                         <div class="border-t border-gray-100"></div>
+                                        
+                                        <!-- Routes accessibles aux superviseurs ET admins -->
                                         <a href="{{ route('deposits.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <i class="fas fa-money-bill-transfer mr-2"></i>Gestion Versements
                                         </a>
@@ -169,22 +142,29 @@
                                         <a href="{{ route('admin.payments.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <i class="fas fa-credit-card mr-2"></i>Gestion Paiements
                                         </a>
-                                        @if(Auth::user()->role === 'admin')
-                                        <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            <i class="fas fa-users mr-2"></i>Gestion Utilisateurs
-                                        </a>
-                                        @endif
-                                        <div class="border-t border-gray-100"></div>
                                         <a href="{{ route('admin.balances.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <i class="fas fa-wallet mr-2"></i>Gestion Balances
                                         </a>
+                                        
+                                        <div class="border-t border-gray-100"></div>
+                                        
+                                        <!-- Routes EXCLUSIVEMENT admin -->
+                                        @if(Auth::user()->role === 'admin')
+                                        <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <i class="fas fa-users mr-2"></i>Gestion Utilisateurs
+                                            <span class="ml-2 px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Admin</span>
+                                        </a>
+                                        <a href="{{ route('admin.mail.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <i class="fas fa-envelope mr-2"></i>Configuration Mailing
+                                            <span class="ml-2 px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Admin</span>
+                                        </a>
+                                        <div class="border-t border-gray-100"></div>
+                                        @endif
+                                        
+                                        <!-- Routes accessibles aux superviseurs ET admins -->
                                         <a href="{{ route('admin.notifications.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <i class="fas fa-bell mr-2"></i>Notifications
                                         </a>
-                                        <a href="{{ route('admin.mail.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            <i class="fas fa-envelope mr-2"></i>Mailing
-                                        </a>
-                                        <div class="border-t border-gray-100"></div>
                                         <a href="{{ route('admin.reports.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             <i class="fas fa-chart-bar mr-2"></i>Rapports
                                         </a>
@@ -305,9 +285,15 @@
                                         <i class="fas fa-tachometer-alt mr-2"></i>Tableau de bord
                                         </a>
                                     @if(Auth::user()->role === 'admin' || Auth::user()->role === 'supervisor')
-                                        <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            <i class="fas fa-cog mr-2"></i>Administration
-                                        </a>
+                                        @if(Auth::user()->role === 'admin')
+                                            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                <i class="fas fa-cog mr-2"></i>Administration
+                                            </a>
+                                        @else
+                                            <a href="{{ route('supervisor.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                <i class="fas fa-cog mr-2"></i>Administration
+                                            </a>
+                                        @endif
                                     @endif
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
@@ -370,9 +356,17 @@
                             <!-- Administration Mobile -->
                             <div class="border-t border-gray-200 pt-2">
                                 <p class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wide">Administration</p>
-                                <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
-                                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard Admin
-                                </a>
+                                @if(Auth::user()->role === 'admin')
+                                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+                                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard Admin
+                                    </a>
+                                @else
+                                    <a href="{{ route('supervisor.dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+                                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard Superviseur
+                                    </a>
+                                @endif
+                                
+                                <!-- Routes accessibles aux superviseurs ET admins -->
                                 <a href="{{ route('deposits.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                                     <i class="fas fa-money-bill-transfer mr-2"></i>Gestion Versements
                                 </a>
@@ -382,19 +376,25 @@
                                 <a href="{{ route('admin.payments.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                                     <i class="fas fa-credit-card mr-2"></i>Gestion Paiements
                                 </a>
-                                @if(Auth::user()->role === 'admin')
-                                <a href="{{ route('admin.users.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
-                                    <i class="fas fa-users mr-2"></i>Gestion Utilisateurs
-                                </a>
-                                @endif
                                 <a href="{{ route('admin.balances.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                                     <i class="fas fa-wallet mr-2"></i>Gestion Balances
                                 </a>
-                                <a href="{{ route('admin.notifications.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
-                                    <i class="fas fa-bell mr-2"></i>Notifications
+                                
+                                <!-- Routes EXCLUSIVEMENT admin -->
+                                @if(Auth::user()->role === 'admin')
+                                <a href="{{ route('admin.users.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+                                    <i class="fas fa-users mr-2"></i>Gestion Utilisateurs
+                                    <span class="ml-2 px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Admin</span>
                                 </a>
                                 <a href="{{ route('admin.mail.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
-                                    <i class="fas fa-envelope mr-2"></i>Mailing
+                                    <i class="fas fa-envelope mr-2"></i>Configuration Mailing
+                                    <span class="ml-2 px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Admin</span>
+                                </a>
+                                @endif
+                                
+                                <!-- Routes accessibles aux superviseurs ET admins -->
+                                <a href="{{ route('admin.notifications.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+                                    <i class="fas fa-bell mr-2"></i>Notifications
                                 </a>
                                 <a href="{{ route('admin.reports.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
                                     <i class="fas fa-chart-bar mr-2"></i>Rapports
@@ -490,6 +490,14 @@
 
             @yield('content')
         </main>
+
+        <!-- WhatsApp Floating Button -->
+        <a href="https://wa.me/221787056767" 
+           class="whatsapp-float"
+           target="_blank"
+           rel="noopener noreferrer">
+            <i class="fab fa-whatsapp text-2xl"></i>
+        </a>
 
         <!-- Footer -->
         @unless(Request::is('/'))
@@ -722,6 +730,18 @@
                 console.error('Erreur:', error);
             });
         }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.remove('navbar-transparent');
+                navbar.classList.add('navbar-solid');
+            } else {
+                navbar.classList.remove('navbar-solid');
+                navbar.classList.add('navbar-transparent');
+            }
+        });
     </script>
 </body>
 </html> 
