@@ -576,7 +576,7 @@
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-bold text-gray-900">Téléphone</h3>
-                                <p class="text-gray-600">+221 78 705 67 67</p>
+                                <p class="text-gray-600">+221 75 750 67 67</p>
                             </div>
                         </div>
                         
