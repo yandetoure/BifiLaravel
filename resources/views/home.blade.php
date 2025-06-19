@@ -108,7 +108,7 @@
 </head>
 <body class="font-sans antialiased text-gray-900">
     <!-- WhatsApp Float Button -->
-    <a href="https://wa.me/221757506767" class="whatsapp-float" target="_blank">
+    <a href="https://wa.me/2217575067" class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
@@ -705,7 +705,7 @@
             
             <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-400">
-                    &copy; 2023 BiFi by NYT. Tous droits réservés.
+                    &copy; 2023 BiFi by Ndeye Yande Toure. Tous droits réservés.
                 </p>
                 <div class="flex space-x-6 mt-4 md:mt-0">
                     <a href="#" class="text-gray-400 hover:text-white transition-colors">
