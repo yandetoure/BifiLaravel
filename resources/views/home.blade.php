@@ -108,9 +108,9 @@
 </head>
 <body class="font-sans antialiased text-gray-900">
     <!-- WhatsApp Float Button -->
-    <a href="https://wa.me/221757506767" class="whatsapp-float" target="_blank">
+    {{-- <a href="https://wa.me/221757506767" class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
-    </a>
+    </a> --}}
 
     <!-- Navigation -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300">
