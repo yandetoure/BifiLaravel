@@ -108,7 +108,7 @@
 </head>
 <body class="font-sans antialiased text-gray-900">
     <!-- WhatsApp Float Button -->
-    <a href="https://wa.me/2217575067" class="whatsapp-float" target="_blank">
+    <a href="https://wa.me/221757506767" class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
