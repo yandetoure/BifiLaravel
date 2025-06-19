@@ -514,7 +514,7 @@
                                 </div>
                                 <div>
                                     <h3 class="font-semibold">Téléphone</h3>
-                                    <p class="text-gray-300">+221 78 705 67 67</p>
+                                    <p class="text-gray-300">+221 75 750 67 67</p>
                                 </div>
                             </div>
                             
@@ -553,7 +553,7 @@
         <!-- Footer -->
         <footer class="bg-gray-800 text-gray-300 py-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <p>&copy; {{ date('Y') }} Bill Box by B!consulting. Tous droits réservés.</p>
+                <p>&copy; {{ date('Y') }} Bill Box by B!consulting. Tous droits réservés par Ndeye Yande Toure.</p>
             </div>
         </footer>
 
