@@ -219,61 +219,37 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Veuillez sélectionner une image de facture');
             return;
         }
-        
-        const formData = new FormData();
-        formData.append('bill_image', file);
-        formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-        
         // Show loader
         document.getElementById('extractionLoader').classList.remove('hidden');
         extractBillData.disabled = true;
-        
-        fetch('{{ route("ocr.extract-bill") }}', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                    // Fill form with extracted data
-                if (data.data.company_name) {
-                        // Try to match company name
-                    const companySelect = document.getElementById('company_id');
-                    const options = companySelect.options;
-                    for (let i = 0; i < options.length; i++) {
-                        if (options[i].text.toUpperCase().includes(data.data.company_name.toUpperCase().substring(0, 10))) {
-                            options[i].selected = true;
-                            break;
-                            }
-                    }
-                    }
-                    
-                if (data.data.bill_number) {
-                    document.getElementById('bill_number').value = data.data.bill_number;
-                    }
-                    
-                if (data.data.client_number) {
-                    document.getElementById('client_number').value = data.data.client_number;
-                    }
-                    
-                if (data.data.amount) {
-                    document.getElementById('amount').value = data.data.amount;
+
+        // Simuler l'extraction OCR (mock)
+        setTimeout(() => {
+            // Données fictives simulant l'extraction d'une facture CMA CGM
+            const mockData = {
+                company_name: 'CMA CGM SENEGAL SA',
+                bill_number: 'SNIM0687571',
+                client_number: '0007796079/001',
+                client_name: 'TAQUIDA TRANSPORT LOGISTIQUE SUARL',
+                amount: '253261.00'
+            };
+            // Remplir le formulaire
+            const companySelect = document.getElementById('company_id');
+            for (let i = 0; i < companySelect.options.length; i++) {
+                if (companySelect.options[i].text.toUpperCase().includes(mockData.company_name.toUpperCase().substring(0, 10))) {
+                    companySelect.options[i].selected = true;
+                    break;
                 }
-                
-                alert('Données extraites avec succès !');
-                } else {
-                alert('Erreur lors de l\'extraction: ' + (data.message || 'Erreur inconnue'));
-                }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-                alert('Erreur lors de l\'extraction des données');
-        })
-        .finally(() => {
-                // Hide loader
+            }
+            document.getElementById('bill_number').value = mockData.bill_number;
+            document.getElementById('client_number').value = mockData.client_number;
+            document.getElementById('client_name').value = mockData.client_name;
+            document.getElementById('amount').value = mockData.amount;
+            alert('Données extraites avec succès (simulation) !');
+            // Hide loader
             document.getElementById('extractionLoader').classList.add('hidden');
             extractBillData.disabled = false;
-        });
+        }, 2000);
     });
 });
 </script>
