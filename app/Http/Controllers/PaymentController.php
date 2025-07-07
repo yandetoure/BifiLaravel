@@ -245,6 +245,23 @@ class PaymentController extends Controller
             $todayBalance->decrement('wizall_final_balance', $payment->total);
         }
         // Les autres méthodes (Wave, Orange Money, Cash) ne déduisent pas du solde car ils sont externes à Wizall
+
+        // Déduire la monnaie rendue de la balance correspondante
+        if (!empty($payment->change_amount) && $payment->change_amount > 0 && !empty($payment->change_method)) {
+            switch ($payment->change_method) {
+                case 'cash':
+                    $todayBalance->decrement('cash_balance', $payment->change_amount);
+                    break;
+                case 'wave':
+                    $todayBalance->decrement('wave_final_balance', $payment->change_amount);
+                    break;
+                case 'om':
+                case 'orange_money':
+                    $todayBalance->decrement('orange_money_balance', $payment->change_amount);
+                    break;
+            }
+        }
+        $todayBalance->save();
     }
 
     private function sendReceiptByEmail(Receipt $receipt, string $email): void

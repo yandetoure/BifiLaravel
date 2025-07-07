@@ -35,7 +35,7 @@
                     </div>
                     <div class="flex justify-between">
                         <span>Solde courant:</span>
-                        <span class="font-medium text-blue-600">{{ number_format($todayBalance->wizall_current_balance ?? 0, 0, ',', ' ') }} FCFA</span>
+                        <span class="font-medium text-blue-600">{{ number_format($balanceData['wizall_current_balance'] ?? 0, 0, ',', ' ') }} FCFA</span>
                     </div>
                     <div class="flex justify-between">
                         <span>Solde final:</span>

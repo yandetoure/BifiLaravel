@@ -5,24 +5,33 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use thiagoalessio\TesseractOCR\TesseractOCR;
+use Smalot\PdfParser\Parser;
 
 class OcrController extends Controller
 {
     public function extractBillData(Request $request)
     {
         $request->validate([
-            'bill_image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'bill_image' => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048'
         ]);
 
         try {
-            $image = $request->file('bill_image');
-            $imagePath = $image->storeAs('temp', uniqid() . '.' . $image->getClientOriginalExtension(), 'public');
+            $file = $request->file('bill_image');
+            $extension = strtolower($file->getClientOriginalExtension());
+            $imagePath = $file->storeAs('temp', uniqid() . '.' . $extension, 'public');
             $fullPath = storage_path('app/public/' . $imagePath);
 
-            // Utiliser Tesseract OCR pour extraire le texte
-            $ocr = new TesseractOCR($fullPath);
-            $ocr->lang('fra'); // Français
-            $text = $ocr->run();
+            if ($extension === 'pdf') {
+                // Extraction PDF
+                $parser = new Parser();
+                $pdf = $parser->parseFile($fullPath);
+                $text = $pdf->getText();
+            } else {
+                // Extraction image (Tesseract)
+                $ocr = new TesseractOCR($fullPath);
+                $ocr->lang('fra');
+                $text = $ocr->run();
+            }
 
             // Extraire les données de la facture
             $extractedData = $this->extractDataFromText($text);
@@ -46,6 +55,10 @@ class OcrController extends Controller
 
     private function extractDataFromText(string $text): array
     {
+        // Nettoyage du texte
+        $text = preg_replace('/[ ]{2,}/', ' ', $text); // espaces multiples -> un espace
+        $text = str_replace("\r", '', $text);
+        $text = preg_replace('/\n+/', "\n", $text); // lignes vides multiples -> une seule
         $lines = explode("\n", $text);
         $lines = array_map('trim', $lines);
         $lines = array_filter($lines); // Enlever les lignes vides
@@ -55,72 +68,60 @@ class OcrController extends Controller
             'bill_number' => '',
             'client_number' => '',
             'client_name' => '',
-            'amount' => ''
+            'amount' => '',
+            'bill_date' => ''
         ];
 
-        foreach ($lines as $index => $line) {
-            $upperLine = strtoupper($line);
+        // Entreprise : première ligne contenant 'CMA CGM'
+        foreach ($lines as $line) {
+            if (stripos($line, 'CMA CGM') !== false) {
+                $data['company_name'] = trim($line);
+                break;
+            }
+        }
 
-            // Entreprise (Payable à ou en-tête)
-            if (empty($data['company_name'])) {
-                if (strpos($upperLine, 'PAYABLE') !== false && isset($lines[$index + 1])) {
-                    $data['company_name'] = trim($lines[$index + 1]);
-                } elseif ($index < 5 && (strpos($upperLine, 'CMA') !== false || strpos($upperLine, 'COMPAGNIE') !== false)) {
-                    $data['company_name'] = $line;
+        // Numéro de facture : gérer le cas où il est sur la ligne suivante après 'Facture No ORIGINAL'
+        foreach ($lines as $i => $line) {
+            if (preg_match('/Facture\s*No[^\n]*ORIGINAL/i', $line)) {
+                // Chercher sur la ligne suivante un mot commençant par SNIM
+                if (isset($lines[$i+1]) && preg_match('/S?NIM[0-9A-Z]+/i', $lines[$i+1], $m)) {
+                    $data['bill_number'] = trim($m[0]);
                 }
             }
+        }
+        // Si toujours vide, chercher le premier mot SNIM... dans tout le texte
+        if (empty($data['bill_number']) && preg_match('/S?NIM[0-9A-Z]+/i', $text, $m)) {
+            $data['bill_number'] = trim($m[0]);
+        }
 
-            // Numéro de facture (Facture No)
-            if (empty($data['bill_number']) && preg_match('/FACTURE\s*NO/i', $line)) {
-                // Cherche le numéro sur la même ligne ou la suivante
-                if (preg_match('/FACTURE\s*NO\s*[:#-]?\s*([A-Z0-9]+)/i', $line, $matches)) {
-                    $data['bill_number'] = $matches[1];
-                } elseif (isset($lines[$index + 1])) {
-                    $possible = trim($lines[$index + 1]);
-                    if (preg_match('/^[A-Z0-9-]+$/', $possible)) {
-                        $data['bill_number'] = $possible;
-                    }
-                }
+        // Numéro client
+        if (preg_match('/Client\s*[:\s]*([0-9\/]+)/i', $text, $m)) {
+            $data['client_number'] = trim($m[1]);
+        }
+        // Nom du client
+        if (preg_match('/Doit\s*[:\s]*([A-Z\s]+)/i', $text, $m)) {
+            $data['client_name'] = trim($m[1]);
+        }
+        // Montant TTC : chercher tous les 'Montant Total' et 'Total T.T.C.', prendre le plus grand
+        $amounts = [];
+        if (preg_match_all('/Montant\s*Total[:\s]*([0-9\., ]+)/iu', $text, $matches1)) {
+            foreach ($matches1[1] as $val) {
+                $val = str_replace([' ', ','], ['', '.'], trim($val));
+                $amounts[] = floatval($val);
             }
-
-            // Numéro client (Client)
-            if (empty($data['client_number']) && preg_match('/CLIENT/i', $line)) {
-                if (preg_match('/CLIENT\s*[:#-]?\s*([0-9A-Z\/]+)/i', $line, $matches)) {
-                    $data['client_number'] = $matches[1];
-                } elseif (isset($lines[$index + 1])) {
-                    $possible = trim($lines[$index + 1]);
-                    if (preg_match('/^[0-9A-Z\/]+$/', $possible)) {
-                        $data['client_number'] = $possible;
-                    }
-                }
+        }
+        if (preg_match_all('/Total\s*T\.?T\.?C?\.?\s*[:\.]?\s*([0-9\., ]+)/iu', $text, $matches2)) {
+            foreach ($matches2[1] as $val) {
+                $val = str_replace([' ', ','], ['', '.'], trim($val));
+                $amounts[] = floatval($val);
             }
-
-            // Nom du client (Doit:)
-            if (empty($data['client_name']) && preg_match('/DOIT\s*:/i', $line)) {
-                // Prend la partie après le ':' ou la ligne suivante
-                $parts = explode(':', $line, 2);
-                if (isset($parts[1]) && trim($parts[1]) !== '') {
-                    $data['client_name'] = trim($parts[1]);
-                } elseif (isset($lines[$index + 1])) {
-                    $data['client_name'] = trim($lines[$index + 1]);
-                }
-            }
-
-            // Montant TTC (Montant Total)
-            if (empty($data['amount']) && preg_match('/MONTANT\s*TOTAL/i', $line)) {
-                // Cherche le montant sur la même ligne ou la suivante
-                if (preg_match('/MONTANT\s*TOTAL\s*[:#-]?\s*([\d., ]+)/i', $line, $matches)) {
-                    $amount = $matches[1];
-                } elseif (isset($lines[$index + 1])) {
-                    $amount = $lines[$index + 1];
-                } else {
-                    $amount = '';
-                }
-                // Nettoyer le montant (enlever FCFA, XOF, espaces, etc.)
-                $amount = preg_replace('/[^\d,.]/', '', $amount);
-                $amount = str_replace(',', '.', $amount);
-                $data['amount'] = $amount;
-            }
+        }
+        if (!empty($amounts)) {
+            $data['amount'] = max($amounts);
+        }
+        // Date de la facture
+        if (preg_match('/Date\s*[:\s]*([0-9]{2}-[A-Z]{3}-[0-9]{4})/i', $text, $m)) {
+            $data['bill_date'] = trim($m[1]);
         }
 
         return $data;

@@ -132,7 +132,7 @@
                     </div>
                 </a>
 
-                <a href="{{ route('supervisor.balances.index') }}" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-200">
+                <a href="{{ route('balances.index') }}" class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-200">
                     <div class="flex-shrink-0 mr-3">
                         <div class="p-2 bg-green-100 rounded-lg">
                             <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -13,17 +13,8 @@ class BalanceController extends Controller
 {
     public function index()
     {
-        $todayBalance = Balance::getTodayBalance();
-        $yesterdayBalance = Balance::getYesterdayBalance();
-        
-        if (!$todayBalance) {
-            $todayBalance = $this->initializeTodayBalance($yesterdayBalance);
-        }
-        
-        // Mettre à jour le solde courant avec les paiements du jour
-        $this->updateCurrentBalance($todayBalance);
-        
-        return view('balances.index', compact('todayBalance', 'yesterdayBalance'));
+        $balanceData = Balance::getUnifiedBalanceView();
+        return view('balances.index', compact('balanceData'));
     }
     
     public function initializeDay()

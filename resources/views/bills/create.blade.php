@@ -77,24 +77,17 @@
                     <div class="grid md:grid-cols-2 gap-6">
                         <!-- Entreprise -->
                         <div>
-                            <label for="company_id" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="company_name" class="block text-sm font-medium text-gray-700 mb-2">
                                 Entreprise <span class="text-red-500">*</span>
                             </label>
-                            <select name="company_id" id="company_id" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('company_id') border-red-500 @enderror" 
-                                    required>
-                                    <option value="">Sélectionnez une entreprise</option>
-                                    @foreach($companies as $company)
-                                        <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>
-                                            {{ $company->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('company_id')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            
+                            <input type="text" name="company_name" id="company_name" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('company_name') border-red-500 @enderror" 
+                                   value="{{ old('company_name') }}" required readonly>
+                            @error('company_name')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
                         <!-- Numéro de facture -->
                         <div>
                             <label for="bill_number" class="block text-sm font-medium text-gray-700 mb-2">
@@ -207,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('manualEntry').addEventListener('click', function() {
         // Just scroll to form
         document.querySelector('form').scrollIntoView({ behavior: 'smooth' });
-        document.getElementById('company_id').focus();
+        document.getElementById('company_name').focus();
     });
     
     // Extract bill data
@@ -216,40 +209,57 @@ document.addEventListener('DOMContentLoaded', function() {
         const file = fileInput.files[0];
         
         if (!file) {
-            alert('Veuillez sélectionner une image de facture');
+            alert('Veuillez sélectionner une image ou un PDF de facture');
             return;
         }
+        
+        const formData = new FormData();
+        formData.append('bill_image', file);
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+        
         // Show loader
         document.getElementById('extractionLoader').classList.remove('hidden');
         extractBillData.disabled = true;
-
-        // Simuler l'extraction OCR (mock)
-        setTimeout(() => {
-            // Données fictives simulant l'extraction d'une facture CMA CGM
-            const mockData = {
-                company_name: 'CMA CGM SENEGAL SA',
-                bill_number: 'SNIM0687571',
-                client_number: '0007796079/001',
-                client_name: 'TAQUIDA TRANSPORT LOGISTIQUE SUARL',
-                amount: '253261.00'
-            };
-            // Remplir le formulaire
-            const companySelect = document.getElementById('company_id');
-            for (let i = 0; i < companySelect.options.length; i++) {
-                if (companySelect.options[i].text.toUpperCase().includes(mockData.company_name.toUpperCase().substring(0, 10))) {
-                    companySelect.options[i].selected = true;
-                    break;
+        
+        fetch('{{ route("ocr.extract-bill") }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Fill form with extracted data
+                if (data.data.company_name) {
+                    // Try to match company name
+                    const companyNameInput = document.getElementById('company_name');
+                    companyNameInput.value = data.data.company_name;
                 }
+                if (data.data.bill_number) {
+                    document.getElementById('bill_number').value = data.data.bill_number;
+                }
+                if (data.data.client_number) {
+                    document.getElementById('client_number').value = data.data.client_number;
+                }
+                if (data.data.client_name) {
+                    document.getElementById('client_name').value = data.data.client_name;
+                }
+                if (data.data.amount) {
+                    document.getElementById('amount').value = data.data.amount;
+                }
+                alert('Données extraites avec succès !');
+            } else {
+                alert('Erreur lors de l\'extraction: ' + (data.message || 'Erreur inconnue'));
             }
-            document.getElementById('bill_number').value = mockData.bill_number;
-            document.getElementById('client_number').value = mockData.client_number;
-            document.getElementById('client_name').value = mockData.client_name;
-            document.getElementById('amount').value = mockData.amount;
-            alert('Données extraites avec succès (simulation) !');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Erreur lors de l\'extraction des données');
+        })
+        .finally(() => {
             // Hide loader
             document.getElementById('extractionLoader').classList.add('hidden');
             extractBillData.disabled = false;
-        }, 2000);
+        });
     });
 });
 </script>
