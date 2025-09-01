@@ -19,7 +19,7 @@
                         <p class="text-gray-600">{{ $bill->company->name }}</p>
                     </div>
                 </div>
-                
+
                 <div class="flex items-center gap-3">
                     <!-- Status Badge -->
                     @switch($bill->status)
@@ -56,7 +56,7 @@
                             </span>
                             @break
                     @endswitch
-                    
+
                     <!-- Actions -->
                     @auth
                         @if(auth()->user()->isAgent() || auth()->user()->isSupervisor() || auth()->user()->isAdmin())
@@ -83,7 +83,7 @@
                     </div>
                     Informations de la facture
                 </h2>
-                
+
                 <div class="space-y-4">
                     <div class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl">
                         <div class="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
@@ -92,7 +92,7 @@
                             <p class="text-lg font-bold text-gray-900">#{{ $bill->bill_number }}</p>
                         </div>
                     </div>
-                    
+
                     <div class="flex items-center p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl">
                         <div class="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
                         <div>
@@ -100,7 +100,7 @@
                             <p class="text-lg font-bold text-gray-900">{{ $bill->client_number }}</p>
                         </div>
                     </div>
-                    
+
                     <div class="flex items-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl">
                         <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
                         <div>
@@ -108,22 +108,22 @@
                             <p class="text-2xl font-bold text-gray-900">{{ number_format($bill->amount, 0, ',', ' ') }} <span class="text-lg text-gray-600">FCFA</span></p>
                         </div>
                     </div>
-                    
+
                     <div class="flex items-center p-4 bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-xl">
                         <div class="w-3 h-3 bg-indigo-500 rounded-full mr-3"></div>
                         <div class="flex-1">
                             <p class="text-sm font-medium text-gray-600">Entreprise</p>
                             <div class="flex items-center mt-1">
                                 @if($bill->company->logo)
-                                    <img src="{{ asset('storage/' . $bill->company->logo) }}" 
-                                         alt="{{ $bill->company->name }}" 
+                                    <img src="{{ asset('storage/' . $bill->company->logo) }}"
+                                         alt="{{ $bill->company->name }}"
                                          class="rounded mr-3 w-8 h-8 object-cover">
                                 @endif
                                 <p class="text-lg font-bold text-gray-900">{{ $bill->company->name }}</p>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="flex items-center p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
                         <div class="w-3 h-3 bg-gray-500 rounded-full mr-3"></div>
                         <div>
@@ -144,7 +144,7 @@
                     </div>
                     Informations du client
                 </h2>
-                
+
                 @if($bill->user)
                     <div class="space-y-4">
                         <div class="flex items-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl">
@@ -154,7 +154,7 @@
                                 <p class="text-lg font-bold text-gray-900">{{ $bill->user->name }}</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl">
                             <div class="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
                             <div>
@@ -162,7 +162,7 @@
                                 <p class="text-lg font-bold text-gray-900">{{ $bill->user->email }}</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-center p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl">
                             <div class="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
                             <div>
@@ -188,7 +188,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 @if($bill->cancellation_message)
                     <div class="mt-6 bg-gradient-to-r from-red-50 to-red-100 rounded-xl p-6 border border-red-200">
                         <h3 class="text-lg font-bold text-red-900 mb-2 flex items-center">
@@ -214,7 +214,7 @@
                 </div>
                 Fichier joint
             </h2>
-            
+
             <div class="flex items-center p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl">
                 <div class="w-12 h-12 bg-orange-200 rounded-xl flex items-center justify-center mr-4">
                     <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,8 +225,8 @@
                     <p class="font-bold text-gray-900">Facture uploadée</p>
                     <p class="text-sm text-gray-600">Fichier joint par le client</p>
                 </div>
-                <a href="{{ asset('storage/' . $bill->uploaded_file) }}" 
-                   target="_blank" 
+                <a href="{{ asset('storage/' . $bill->uploaded_file) }}"
+                   target="_blank"
                    class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors inline-flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -248,7 +248,7 @@
                 </div>
                 Historique des paiements
             </h2>
-            
+
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
@@ -288,16 +288,16 @@
 
         <!-- Actions en bas -->
         <div class="mt-8 flex justify-center gap-4">
-            <a href="{{ route('user.dashboard') }}" 
+            <a href="{{ route('user.dashboard') }}"
                class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors inline-flex items-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
                 Retour au dashboard
             </a>
-            
+
             @if(!$bill->isPaid() && auth()->check())
-                <a href="{{ route('payments.create', $bill) }}" 
+                <a href="{{ route('payments.create', $bill) }}"
                    class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors inline-flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
@@ -308,4 +308,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection

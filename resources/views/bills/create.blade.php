@@ -151,9 +151,11 @@
                             <label for="amount" class="block text-sm font-medium text-gray-700 mb-2">
                                 Montant TTC (FCFA) <span class="text-red-500">*</span>
                             </label>
-                            <input type="number" name="amount" id="amount"
+                            <input type="text" name="amount" id="amount"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('amount') border-red-500 @enderror"
-                                   value="{{ old('amount') }}" min="0" step="0.01" required>
+                                   value="{{ old('amount') }}" placeholder="0.00" required
+                                   pattern="[0-9]*\.?[0-9]+"
+                                   title="Veuillez saisir un montant valide (ex: 291590.00)">
                             @error('amount')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -289,12 +291,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data.client_name) {
             document.getElementById('client_name').value = data.client_name;
         }
-        if (data.amount) {
-            document.getElementById('amount').value = data.amount;
-        }
+        // Ne pas récupérer le montant automatiquement - l'utilisateur doit le saisir manuellement
+        // if (data.amount) {
+        //     document.getElementById('amount').value = data.amount;
+        // }
 
-        // Add visual feedback to filled fields
-        const filledFields = ['company_name', 'bill_number', 'client_number', 'client_name', 'amount'];
+        // Add visual feedback to filled fields (excluding amount which is manually entered)
+        const filledFields = ['company_name', 'bill_number', 'client_number', 'client_name'];
         filledFields.forEach(fieldId => {
             const field = document.getElementById(fieldId);
             if (field.value) {
@@ -305,6 +308,26 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Validation simple du montant - s'assure que seuls les nombres sont saisis
+    document.getElementById('amount').addEventListener('input', function(e) {
+        // Supprimer tout sauf les chiffres et le point décimal
+        let value = e.target.value.replace(/[^\d.]/g, '');
+
+        // S'assurer qu'il n'y a qu'un seul point décimal
+        const parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        // Limiter à 2 décimales maximum
+        if (parts.length === 2 && parts[1].length > 2) {
+            value = parts[0] + '.' + parts[1].substring(0, 2);
+        }
+
+        // Mettre à jour la valeur
+        e.target.value = value;
+    });
 });
 </script>
 @endsection
