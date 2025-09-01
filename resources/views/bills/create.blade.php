@@ -3,16 +3,20 @@
 @section('title', 'Payer une facture')
 
 @section('content')
-<div class="min-h-screen bg-gray-50 py-8">
+<div class="min-h-screen bg-gray-50 py-8 pb-16">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <!-- Header -->
-            <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
-                <h1 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-file-invoice mr-3"></i>
-                    Payer une facture
-                </h1>
+        <!-- Page Header with Logo -->
+        <div class="text-center mb-8">
+            <div class="flex justify-center items-center mb-4">
+                <div class="bitcoin-logo mr-4">₿</div>
+                <div class="text-left">
+                    <h1 class="text-3xl font-bold text-gray-900">Payer une facture</h1>
+                    <p class="text-gray-600 mt-1">Plateforme sécurisée de paiement ₿iFi</p>
+                </div>
             </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
 
             <div class="p-6">
                 <p class="text-gray-600 mb-6">
@@ -23,9 +27,9 @@
                 <!-- OCR Section -->
                 <div class="grid md:grid-cols-2 gap-6 mb-8">
                     <!-- Option 1: Upload PDF -->
-                    <div class="border border-blue-200 rounded-lg overflow-hidden">
-                        <div class="bg-blue-50 px-4 py-3 border-b border-blue-200">
-                            <h3 class="text-sm font-semibold text-blue-800 flex items-center">
+                    <div class="border border-bifi-turquoise rounded-lg overflow-hidden">
+                        <div class="bg-bifi-turquoise bg-opacity-10 px-4 py-3 border-b border-bifi-turquoise">
+                            <h3 class="text-sm font-semibold text-bifi-turquoise flex items-center">
                                 <i class="fas fa-file-pdf mr-2"></i>
                                 Option 1: Extraction automatique (PDF uniquement)
                             </h3>
@@ -35,15 +39,15 @@
                                 Téléchargez un fichier PDF de votre facture pour extraction automatique
                             </p>
                             <input type="file" id="billImageUpload" accept=".pdf"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-bifi-turquoise focus:border-bifi-turquoise">
                             <button type="button" id="extractBillData"
-                                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    class="w-full bg-bifi-turquoise text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                     disabled>
                                 <i class="fas fa-magic mr-2"></i>Extraire les données
                             </button>
                             <div id="extractionLoader" class="mt-4 hidden">
                                 <div class="flex justify-center">
-                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-bifi-turquoise"></div>
                                 </div>
                                 <p class="text-gray-600 mt-2 text-sm">Analyse de la facture en cours...</p>
                             </div>
@@ -69,7 +73,7 @@
                                 Remplissez directement le formulaire ci-dessous
                             </p>
                             <button type="button" id="manualEntry"
-                                    class="w-full bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-200">
+                                    class="w-full bg-bifi-orange text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition duration-200">
                                 <i class="fas fa-edit mr-2"></i>Saisie manuelle
                             </button>
                         </div>
@@ -87,7 +91,7 @@
                                 Entreprise <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="company_name" id="company_name"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('company_name') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bifi-turquoise focus:border-bifi-turquoise @error('company_name') border-red-500 @enderror"
                                    value="{{ old('company_name') }}" required placeholder="Nom de l'entreprise">
                             @error('company_name')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -100,7 +104,7 @@
                                 Numéro de facture <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="bill_number" id="bill_number"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('bill_number') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bifi-turquoise focus:border-bifi-turquoise @error('bill_number') border-red-500 @enderror"
                                    value="{{ old('bill_number') }}" required>
                             @error('bill_number')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -113,7 +117,7 @@
                                 Numéro client <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="client_number" id="client_number"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('client_number') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bifi-turquoise focus:border-bifi-turquoise @error('client_number') border-red-500 @enderror"
                                    value="{{ old('client_number') }}" required>
                             @error('client_number')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -126,7 +130,7 @@
                                 Nom du client <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="client_name" id="client_name"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('client_name') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bifi-turquoise focus:border-bifi-turquoise @error('client_name') border-red-500 @enderror"
                                    value="{{ old('client_name') }}" required placeholder="Nom complet du client">
                             @error('client_name')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -139,7 +143,7 @@
                                 Numéro de téléphone <span class="text-red-500">*</span>
                             </label>
                             <input type="tel" name="phone" id="phone"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('phone') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bifi-turquoise focus:border-bifi-turquoise @error('phone') border-red-500 @enderror"
                                    value="{{ old('phone') }}" required placeholder="Ex: +221 77 123 45 67">
                             @error('phone')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -152,7 +156,7 @@
                                 Montant TTC (FCFA) <span class="text-red-500">*</span>
                             </label>
                             <input type="text" name="amount" id="amount"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('amount') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bifi-turquoise focus:border-bifi-turquoise @error('amount') border-red-500 @enderror"
                                    value="{{ old('amount') }}" placeholder="0.00" required
                                    pattern="[0-9]*\.?[0-9]+"
                                    title="Veuillez saisir un montant valide (ex: 291590.00)">
@@ -168,7 +172,7 @@
                             Fichier de la facture (optionnel)
                         </label>
                         <input type="file" name="uploaded_file" id="uploaded_file"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('uploaded_file') border-red-500 @enderror"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bifi-turquoise focus:border-bifi-turquoise @error('uploaded_file') border-red-500 @enderror"
                                accept=".pdf,.jpg,.jpeg,.png">
                         <p class="text-gray-500 text-sm mt-1">Formats acceptés: PDF, JPG, PNG (max 2MB)</p>
                         @error('uploaded_file')
@@ -179,11 +183,11 @@
                     <!-- Buttons -->
                     <div class="border-t border-gray-200 pt-6 flex flex-col sm:flex-row sm:justify-end gap-3">
                         <a href="{{ route('home') }}"
-                           class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200">
+                           class="inline-flex items-center justify-center px-6 py-3 border border-bifi-turquoise text-bifi-turquoise rounded-lg hover:bg-bifi-turquoise hover:text-white transition duration-200">
                             <i class="fas fa-arrow-left mr-2"></i>Retour
                         </a>
                         <button type="submit"
-                                class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                                class="inline-flex items-center justify-center px-6 py-3 bg-bifi-turquoise text-white rounded-lg hover:bg-opacity-90 transition duration-200">
                             <i class="fas fa-paper-plane mr-2"></i>Soumettre la demande
                         </button>
                     </div>
@@ -191,6 +195,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Additional bottom spacing -->
+    <div class="h-16"></div>
 </div>
 
 <script>

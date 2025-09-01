@@ -11,16 +11,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Custom CSS -->
     <link href="{{ asset('css/bitcoin-logo.css') }}" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <!-- Configuration Tailwind personnalisée -->
     <script>
         tailwind.config = {
@@ -59,7 +59,7 @@
                 <div class="flex justify-between h-20 items-center">
                     <div class="flex-shrink-0 flex items-center">
                         <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                            <div class="bitcoin-logo">₿</div>
+                            <div class="bitcoin-logo navbar">₿</div>
                             <span class="text-white text-2xl font-bold">₿iFi</span>
                         </a>
                     </div>
@@ -155,7 +155,7 @@
         @endif
 
         <!-- Main Content -->
-        <main class="flex-1 py-6">
+        <main class="flex-1 py-6 pb-20 mt-20">
             <!-- Flash Messages -->
             @if(session('success'))
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
@@ -221,7 +221,7 @@
         </main>
 
         <!-- WhatsApp Floating Button -->
-        <a href="https://wa.me/221787056767" 
+        <a href="https://wa.me/221787056767"
            class="whatsapp-float"
            target="_blank"
            rel="noopener noreferrer">
@@ -235,15 +235,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div>
                         <div class="flex items-center space-x-3 mb-4">
-                            <img src="{{ asset('images/logobi.png') }}" alt="B!consulting Logo" class="h-8 w-auto">
+                            <div class="bitcoin-logo navbar">₿</div>
                             <div>
-                                <span class="text-xl font-bold text-gradient">Bifi</span>
+                                <span class="text-xl font-bold text-white">₿iFi</span>
                                 <p class="text-xs text-gray-400">by B!consulting</p>
                             </div>
                         </div>
                         <p class="text-gray-300 text-sm">Plateforme sécurisée pour le paiement de factures développée par B!consulting.</p>
                     </div>
-                    
+
                     <div>
                         <h6 class="font-semibold mb-3">Contact</h6>
                         <div class="space-y-2 text-sm text-gray-300">
@@ -252,7 +252,7 @@
                             <p><i class="fas fa-map-marker-alt mr-2"></i>Mermoz, Dakar Sénégal</p>
                         </div>
                     </div>
-                    
+
                     <div>
                         <h6 class="font-semibold mb-3">Liens rapides</h6>
                         <div class="space-y-2 text-sm">
@@ -264,10 +264,10 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="border-t border-gray-700 mt-8 pt-6 text-center">
                     <p class="text-gray-400 text-sm">
-                        &copy; {{ date('Y') }} <strong>B!CONSULTING</strong> - Tous droits réservés. 
+                        &copy; {{ date('Y') }} <strong>B!CONSULTING</strong> - Tous droits réservés.
                         <span class="text-blue-400">Faites vous remarquer !</span>
                     </p>
                 </div>
@@ -280,7 +280,7 @@
         function toggleDropdown() {
             const dropdown = document.getElementById('userDropdown');
             dropdown.classList.toggle('hidden');
-            
+
             // Fermer les autres dropdowns
             const communicationDropdown = document.getElementById('communicationDropdown');
             const adminDropdown = document.getElementById('adminDropdown');
@@ -289,11 +289,11 @@
             if (adminDropdown) adminDropdown.classList.add('hidden');
             if (notificationsDropdown) notificationsDropdown.classList.add('hidden');
         }
-        
+
         function toggleCommunicationDropdown() {
             const dropdown = document.getElementById('communicationDropdown');
             dropdown.classList.toggle('hidden');
-            
+
             // Fermer les autres dropdowns
             const userDropdown = document.getElementById('userDropdown');
             const adminDropdown = document.getElementById('adminDropdown');
@@ -302,11 +302,11 @@
             if (adminDropdown) adminDropdown.classList.add('hidden');
             if (notificationsDropdown) notificationsDropdown.classList.add('hidden');
         }
-        
+
         function toggleAdminDropdown() {
             const dropdown = document.getElementById('adminDropdown');
             dropdown.classList.toggle('hidden');
-            
+
             // Fermer les autres dropdowns
             const userDropdown = document.getElementById('userDropdown');
             const communicationDropdown = document.getElementById('communicationDropdown');
@@ -317,11 +317,11 @@
             if (clientDropdown) clientDropdown.classList.add('hidden');
             if (notificationsDropdown) notificationsDropdown.classList.add('hidden');
         }
-        
+
         function toggleClientDropdown() {
             const dropdown = document.getElementById('clientDropdown');
             dropdown.classList.toggle('hidden');
-            
+
             // Fermer les autres dropdowns
             const userDropdown = document.getElementById('userDropdown');
             const communicationDropdown = document.getElementById('communicationDropdown');
@@ -332,11 +332,11 @@
             if (adminDropdown) adminDropdown.classList.add('hidden');
             if (notificationsDropdown) notificationsDropdown.classList.add('hidden');
         }
-        
+
         function toggleNotificationsDropdown() {
             const dropdown = document.getElementById('notificationsDropdown');
             dropdown.classList.toggle('hidden');
-            
+
             // Fermer les autres dropdowns
             const userDropdown = document.getElementById('userDropdown');
             const communicationDropdown = document.getElementById('communicationDropdown');
@@ -358,7 +358,7 @@
             const adminDropdown = document.getElementById('adminDropdown');
             const clientDropdown = document.getElementById('clientDropdown');
             const notificationsDropdown = document.getElementById('notificationsDropdown');
-            
+
             if (!event.target.closest('.relative')) {
                 if (userDropdown) userDropdown.classList.add('hidden');
                 if (communicationDropdown) communicationDropdown.classList.add('hidden');
@@ -367,14 +367,14 @@
                 if (notificationsDropdown) notificationsDropdown.classList.add('hidden');
             }
         });
-        
+
         // Afficher le badge de notification s'il y a des notifications
         document.addEventListener('DOMContentLoaded', function() {
             @auth
                 @php
                     $user = Auth::user();
                     $notifications = [];
-                    
+
                     // Notifications pour solde bas Wizall (tous les rôles)
                     if($user->role === 'agent' || $user->role === 'supervisor' || $user->role === 'admin') {
                         $todayBalance = \App\Models\Balance::getTodayBalance();
@@ -388,7 +388,7 @@
                             ];
                         }
                     }
-                    
+
                     // Notifications de fin de journée pour agents
                     if($user->role === 'agent') {
                         $hour = date('H');
@@ -402,7 +402,7 @@
                             ];
                         }
                     }
-                    
+
                     // Messages clients non lus (pour agents, superviseurs, admins)
                     if($user->role !== 'client') {
                         $unreadClientMessages = \App\Models\ClientMessage::where('is_read', false)->count();
@@ -417,7 +417,7 @@
                         }
                     }
                 @endphp
-                
+
                 @if(count($notifications) > 0)
                     const notificationBadge = document.getElementById('notification-badge');
                     if (notificationBadge) {
@@ -426,7 +426,7 @@
                 @endif
             @endauth
         });
-        
+
         // Fonction pour marquer toutes les notifications comme lues
         function markAllNotificationsRead() {
             fetch('{{ route("notifications.mark-all-read") }}', {
@@ -444,13 +444,13 @@
                     if (notificationBadge) {
                         notificationBadge.classList.add('hidden');
                     }
-                    
+
                     // Fermer le dropdown
                     const notificationsDropdown = document.getElementById('notificationsDropdown');
                     if (notificationsDropdown) {
                         notificationsDropdown.classList.add('hidden');
                     }
-                    
+
                     // Recharger la page pour mettre à jour les notifications
                     window.location.reload();
                 }
@@ -473,4 +473,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
