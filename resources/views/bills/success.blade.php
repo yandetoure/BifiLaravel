@@ -17,7 +17,7 @@
                 <!-- Ripple Effect -->
                 <div class="absolute inset-0 w-24 h-24 rounded-full bg-green-400 opacity-20 animate-ping"></div>
             </div>
-            
+
             <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 animate-slide-up">
                 Facture soumise avec <span class="text-gradient bg-gradient-to-r from-green-500 to-blue-600 bg-clip-text text-transparent">succès</span> !
             </h1>
@@ -37,7 +37,7 @@
                 </div>
                 <h2 class="text-2xl font-bold text-gray-900">Détails de votre facture</h2>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-4">
                     <div class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl">
@@ -47,16 +47,16 @@
                             <p class="text-lg font-bold text-gray-900">#{{ $bill->bill_number }}</p>
                         </div>
                     </div>
-                    
+
                     <div class="flex items-center p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl">
                         <div class="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
                         <div>
                             <p class="text-sm font-medium text-gray-600">Entreprise</p>
-                            <p class="text-lg font-bold text-gray-900">{{ $bill->company->name }}</p>
+                            <p class="text-lg font-bold text-gray-900">{{ $bill->company_name }}</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="space-y-4">
                     <div class="flex items-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl">
                         <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
@@ -65,7 +65,7 @@
                             <p class="text-lg font-bold text-gray-900">{{ $bill->client_number }}</p>
                         </div>
                     </div>
-                    
+
                     <div class="flex items-center p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
                         <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
                         <div>
@@ -81,7 +81,7 @@
         <!-- Process Steps -->
         <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100 animate-slide-up-delay-3">
             <h2 class="text-2xl font-bold text-gray-900 text-center mb-8">Prochaines étapes</h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Step 1 -->
                 <div class="relative group">
@@ -298,4 +298,4 @@
     animation: scaleIn 0.6s ease-out 0.8s both;
 }
 </style>
-@endsection 
+@endsection

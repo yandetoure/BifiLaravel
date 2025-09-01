@@ -5,21 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Models\Company;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class BillController extends Controller
 {
     public function create()
     {
-        $companies = Company::all();
-        return view('bills.create', compact('companies'));
+        return view('bills.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'company_id' => 'required|exists:companies,id',
+            'company_name' => 'required|string|max:255',
             'bill_number' => 'required|string',
             'client_number' => 'required|string',
             'client_name' => 'required|string|max:255',
@@ -28,9 +27,9 @@ class BillController extends Controller
             'uploaded_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048'
         ]);
 
-        $data = $request->only(['company_id', 'bill_number', 'client_number', 'client_name', 'phone', 'amount']);
+        $data = $request->only(['company_name', 'bill_number', 'client_number', 'client_name', 'phone', 'amount']);
         $data['status'] = 'pending'; // Statut par défaut
-        
+
         // Associer à l'utilisateur connecté s'il existe
         if (Auth::check()) {
             $data['user_id'] = Auth::id();
@@ -43,9 +42,6 @@ class BillController extends Controller
 
         $bill = Bill::create($data);
 
-        // Charger les relations pour la page de succès
-        $bill->load('company');
-
         return redirect()->route('bills.success')->with([
             'success' => 'Votre demande de paiement a été soumise avec succès!',
             'bill' => $bill
@@ -55,12 +51,12 @@ class BillController extends Controller
     public function show(Bill $bill)
     {
         $bill->load(['company', 'user', 'payments.agent']);
-        
+
         // Si c'est une requête AJAX, retourner une vue partielle
         if (request()->ajax()) {
             return view('bills.show-modal', compact('bill'));
         }
-        
+
         return view('bills.show', compact('bill'));
     }
 
@@ -72,7 +68,7 @@ class BillController extends Controller
         ]);
 
         $updateData = ['status' => $request->status];
-        
+
         if ($request->status === 'cancelled' && $request->cancellation_message) {
             $updateData['cancellation_message'] = $request->cancellation_message;
         }
@@ -103,7 +99,7 @@ class BillController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('q');
-        
+
         $bills = Bill::with(['company', 'user'])
             ->where('bill_number', 'like', "%{$search}%")
             ->orWhere('client_number', 'like', "%{$search}%")
@@ -125,7 +121,7 @@ class BillController extends Controller
         $bills = Bill::where(function($query) use ($user) {
                         $query->where('client_name', $user->name)
                               ->orWhere('phone', $user->phone);
-                        
+
                         // Si l'utilisateur a un email, chercher aussi par email dans les détails
                         if ($user->email) {
                             $query->orWhere('client_name', 'like', '%' . $user->email . '%');

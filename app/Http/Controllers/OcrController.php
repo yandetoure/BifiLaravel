@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use thiagoalessio\TesseractOCR\TesseractOCR;
 use Smalot\PdfParser\Parser;
+use Illuminate\Support\Facades\Storage;
 
 class OcrController extends Controller
 {
@@ -22,15 +21,17 @@ class OcrController extends Controller
             $fullPath = storage_path('app/public/' . $imagePath);
 
             if ($extension === 'pdf') {
-                // Extraction PDF
+                // Extraction PDF simple
                 $parser = new Parser();
                 $pdf = $parser->parseFile($fullPath);
                 $text = $pdf->getText();
             } else {
-                // Extraction image (Tesseract)
-                $ocr = new TesseractOCR($fullPath);
-                $ocr->lang('fra');
-                $text = $ocr->run();
+                // Pour les images, on retourne juste un message indiquant qu'il faut utiliser un PDF
+                Storage::disk('public')->delete($imagePath);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Veuillez utiliser un fichier PDF pour l\'extraction automatique. Les images ne sont pas supportées pour le moment.'
+                ], 400);
             }
 
             // Extraire les données de la facture
@@ -98,10 +99,11 @@ class OcrController extends Controller
         if (preg_match('/Client\s*[:\s]*([0-9\/]+)/i', $text, $m)) {
             $data['client_number'] = trim($m[1]);
         }
-        // Nom du client
-        if (preg_match('/Doit\s*[:\s]*([A-Z\s]+)/i', $text, $m)) {
+        // Nom du client : chercher après "Doit:" et prendre toute la ligne
+        if (preg_match('/Doit\s*[:\s]*([^\n]+)/i', $text, $m)) {
             $data['client_name'] = trim($m[1]);
         }
+
         // Montant TTC : chercher tous les 'Montant Total' et 'Total T.T.C.', prendre le plus grand
         $amounts = [];
         if (preg_match_all('/Montant\s*Total[:\s]*([0-9\., ]+)/iu', $text, $matches1)) {
