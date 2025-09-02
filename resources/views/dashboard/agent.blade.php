@@ -313,12 +313,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        @if($bill->company->logo)
-                                            <img src="{{ asset('storage/' . $bill->company->logo) }}"
-                                                 alt="{{ $bill->company->name }}"
-                                                 class="h-8 w-8 rounded mr-3">
-                                        @endif
-                                        <span class="text-sm text-gray-900">{{ $bill->company->name }}</span>
+                                        <span class="text-sm text-gray-900">{{ $bill->company_name }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">

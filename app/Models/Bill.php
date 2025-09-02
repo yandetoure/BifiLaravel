@@ -40,7 +40,7 @@ class Bill extends Model
         'is_third_party_payment' => 'boolean',
     ];
 
-    // Relation company supprimée - utilisation de company_name à la place
+    // Pas de relation company - utilisation directe de company_name
 
     public function user()
     {

@@ -1,21 +1,21 @@
-<?php declare(strict_types=1); 
+<?php declare(strict_types=1);
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\BillController;
-use App\Http\Controllers\PaymentController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OcrController;
-use App\Http\Controllers\ReceiptController;
-use App\Http\Controllers\BalanceController;
+use App\Http\Controllers\BillController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgentController;
-use App\Http\Controllers\SupervisorController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\ClientChatController;
-use App\Http\Controllers\ThirdPartyPaymentController;
+use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\DepositController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\ClientChatController;
+use App\Http\Controllers\SupervisorController;
+use App\Http\Controllers\ThirdPartyPaymentController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', function () {
@@ -37,31 +37,31 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
     // Dashboard personnalisé
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('user.dashboard');
-    
+
     // Routes pour les factures (tous les utilisateurs connectés)
     Route::get('/bills/{bill}', [BillController::class, 'show'])->name('bills.show');
-    
+
     // Routes pour les clients - Mes factures et reçus
     Route::prefix('my')->name('my.')->group(function () {
         Route::get('/bills', [BillController::class, 'myBills'])->name('bills');
         Route::get('/receipts', [ReceiptController::class, 'myReceipts'])->name('receipts');
         Route::get('/payments', [PaymentController::class, 'myPayments'])->name('payments');
     });
-    
+
     // Routes pour les agents et superviseurs seulement
     Route::patch('/bills/{bill}/status', [BillController::class, 'updateStatus'])->name('bills.updateStatus');
-    
+
     // Routes pour les paiements - Accessible aux clients pour leurs propres factures et aux agents/superviseurs
     Route::get('/payments/create/{bill}', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
     Route::get('/payments/{payment}/success', [PaymentController::class, 'success'])->name('payments.success');
-    
+
     // Routes pour les reçus
     Route::get('/receipts/generate/{payment}', [ReceiptController::class, 'generate'])->name('receipts.generate');
     Route::get('/receipts/{receipt}/download', [ReceiptController::class, 'download'])->name('receipts.download');
     Route::post('/receipts/{receipt}/send-email', [ReceiptController::class, 'sendByEmail'])->name('receipts.send-email');
     Route::post('/receipts/{receipt}/send-whatsapp', [ReceiptController::class, 'sendByWhatsapp'])->name('receipts.send-whatsapp');
-    
+
     // Routes pour la gestion des soldes
     Route::prefix('balances')->name('balances.')->group(function () {
         Route::get('/', [BalanceController::class, 'index'])->name('index');
@@ -79,30 +79,30 @@ Route::middleware('auth')->group(function () {
         Route::get('/messages', [ChatController::class, 'getMessages'])->name('get-messages');
         Route::post('/mark-read', [ChatController::class, 'markAsRead'])->name('mark-read');
     });
-    
+
     // Routes pour les notifications
     Route::prefix('notifications')->name('notifications.')->group(function () {
         Route::post('/mark-all-read', [ChatController::class, 'markAllNotificationsRead'])->name('mark-all-read');
     });
-    
+
     // Routes pour les uploads de fichiers
     Route::prefix('uploads')->name('uploads.')->group(function () {
         Route::post('/chat-file', [\App\Http\Controllers\FileUploadController::class, 'uploadChatFile'])->name('chat-file');
         Route::delete('/file', [\App\Http\Controllers\FileUploadController::class, 'deleteFile'])->name('delete-file');
     });
-    
+
     // Routes pour les versements - Système unifié
     Route::prefix('deposits')->name('deposits.')->group(function () {
         Route::get('/', [DepositController::class, 'index'])->name('index');
         Route::get('/history', [DepositController::class, 'history'])->name('history');
         Route::get('/stats', [DepositController::class, 'getStats'])->name('stats');
-        
+
         // Versements selon les rôles
         Route::post('/agent-deposit', [DepositController::class, 'agentDeposit'])->name('agent-deposit');
         Route::post('/supervisor-deposit', [DepositController::class, 'supervisorDeposit'])->name('supervisor-deposit');
         Route::post('/cash-collection', [DepositController::class, 'cashCollection'])->name('cash-collection');
         Route::post('/wizall-refill', [DepositController::class, 'wizallRefill'])->name('wizall-refill');
-        
+
         // Admin uniquement
         Route::post('/reset-balance', [DepositController::class, 'resetBalance'])->name('reset-balance')->middleware('admin');
     });
@@ -112,23 +112,23 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () {
     // Dashboard agent
     Route::get('/dashboard', [AgentController::class, 'dashboard'])->name('dashboard');
-    
+
     // Gestion des factures
     Route::prefix('bills')->name('bills.')->group(function () {
         Route::get('/', [AgentController::class, 'bills'])->name('index');
         Route::get('/{bill}', [BillController::class, 'show'])->name('show');
         Route::patch('/{bill}/status', [AgentController::class, 'updateBillStatus'])->name('update-status');
     });
-    
+
     // Gestion des paiements
     Route::prefix('payments')->name('payments.')->group(function () {
         Route::get('/', [AgentController::class, 'payments'])->name('index');
         Route::get('/{payment}', [PaymentController::class, 'success'])->name('show');
     });
-    
+
     // Statistiques agent
     Route::get('/statistics', [AgentController::class, 'statistics'])->name('statistics');
-    
+
     // Gestion des balances (superviseurs seulement)
     Route::middleware('can:manage,App\Models\Balance')->prefix('balances')->name('balances.')->group(function () {
         Route::get('/', [BalanceController::class, 'index'])->name('index');
@@ -143,16 +143,16 @@ Route::middleware(['auth'])->prefix('agent')->name('agent.')->group(function () 
 Route::middleware(['auth'])->prefix('supervisor')->name('supervisor.')->group(function () {
     // Dashboard superviseur
     Route::get('/dashboard', [SupervisorController::class, 'dashboard'])->name('dashboard');
-    
+
     // Gestion des balances
     Route::get('/balances', [SupervisorController::class, 'balances'])->name('balances');
-    
+
     // Versements bancaires
     Route::post('/bank-deposit', [SupervisorController::class, 'bankDeposit'])->name('bank-deposit');
-    
+
     // Calculs fin de journée
     Route::get('/end-of-day', [SupervisorController::class, 'endOfDayCalculation'])->name('end-of-day');
-    
+
     // Détails des agents
     Route::get('/agents/{agent}', [SupervisorController::class, 'agentDetails'])->name('agent-details');
 });
@@ -161,7 +161,7 @@ Route::middleware(['auth'])->prefix('supervisor')->name('supervisor.')->group(fu
 Route::middleware(['auth', 'supervisor.or.admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard admin
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-    
+
     // Gestion des utilisateurs - ADMIN UNIQUEMENT
     Route::middleware('admin')->prefix('users')->name('users.')->group(function () {
         Route::get('/', [AdminController::class, 'users'])->name('index');
@@ -172,7 +172,7 @@ Route::middleware(['auth', 'supervisor.or.admin'])->prefix('admin')->name('admin
         Route::patch('/{user}/archive', [AdminController::class, 'archiveUser'])->name('archive');
         Route::delete('/{user}', [AdminController::class, 'deleteUser'])->name('delete');
     });
-    
+
     // Gestion des factures
     Route::prefix('bills')->name('bills.')->group(function () {
         Route::get('/', [AdminController::class, 'bills'])->name('index');
@@ -181,7 +181,7 @@ Route::middleware(['auth', 'supervisor.or.admin'])->prefix('admin')->name('admin
         Route::delete('/{bill}', [AdminController::class, 'deleteBill'])->name('delete');
         Route::post('/bulk-update', [AdminController::class, 'bulkUpdateBills'])->name('bulk-update');
     });
-    
+
     // Gestion des paiements
     Route::prefix('payments')->name('payments.')->group(function () {
         Route::get('/', [AdminController::class, 'payments'])->name('index');
@@ -189,7 +189,7 @@ Route::middleware(['auth', 'supervisor.or.admin'])->prefix('admin')->name('admin
         Route::patch('/{payment}/status', [AdminController::class, 'updatePaymentStatus'])->name('update-status');
         Route::delete('/{payment}', [AdminController::class, 'deletePayment'])->name('delete');
     });
-    
+
     // Gestion des entreprises
     Route::prefix('companies')->name('companies.')->group(function () {
         Route::get('/', [AdminController::class, 'companies'])->name('index');
@@ -199,7 +199,7 @@ Route::middleware(['auth', 'supervisor.or.admin'])->prefix('admin')->name('admin
         Route::patch('/{company}', [AdminController::class, 'updateCompany'])->name('update');
         Route::delete('/{company}', [AdminController::class, 'deleteCompany'])->name('delete');
     });
-    
+
     // Gestion des soldes - Vue complète admin
     Route::prefix('balances')->name('balances.')->group(function () {
         Route::get('/', [AdminController::class, 'balances'])->name('index');
@@ -207,14 +207,14 @@ Route::middleware(['auth', 'supervisor.or.admin'])->prefix('admin')->name('admin
         Route::post('/manual-adjustment', [AdminController::class, 'manualBalanceAdjustment'])->name('manual-adjustment');
         Route::get('/export', [AdminController::class, 'exportBalances'])->name('export');
     });
-    
+
     // Gestion des transactions
     Route::prefix('transactions')->name('transactions.')->group(function () {
         Route::get('/', [AdminController::class, 'transactions'])->name('index');
         Route::get('/{transaction}', [AdminController::class, 'showTransaction'])->name('show');
         Route::patch('/{transaction}/status', [AdminController::class, 'updateTransactionStatus'])->name('update-status');
     });
-    
+
     // Rapports et exports
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('/', [AdminController::class, 'reports'])->name('index');
@@ -225,8 +225,8 @@ Route::middleware(['auth', 'supervisor.or.admin'])->prefix('admin')->name('admin
         Route::get('/export', [AdminController::class, 'exportExcel'])->name('export');
         Route::post('/export-custom', [AdminController::class, 'exportCustomReport'])->name('export-custom');
     });
-    
-    // Configuration système - ADMIN UNIQUEMENT  
+
+    // Configuration système - ADMIN UNIQUEMENT
     Route::middleware('admin')->prefix('settings')->name('settings.')->group(function () {
         Route::get('/', [AdminController::class, 'settings'])->name('index');
         Route::patch('/general', [AdminController::class, 'updateGeneralSettings'])->name('general');
@@ -234,14 +234,14 @@ Route::middleware(['auth', 'supervisor.or.admin'])->prefix('admin')->name('admin
         Route::patch('/notifications', [AdminController::class, 'updateNotificationSettings'])->name('notifications');
         Route::patch('/wizall-balance', [AdminController::class, 'updateWizallBalance'])->name('wizall-balance');
     });
-    
+
     // Mailing système
     Route::prefix('mail')->name('mail.')->group(function () {
         Route::get('/', [AdminController::class, 'mailIndex'])->name('index');
         Route::post('/send-to-clients', [AdminController::class, 'sendToAllClients'])->name('send-to-clients');
         Route::post('/send-custom', [AdminController::class, 'sendCustomEmail'])->name('send-custom');
     });
-    
+
     // Notifications système
     Route::prefix('notifications')->name('notifications.')->group(function () {
         Route::get('/', [AdminController::class, 'notificationsIndex'])->name('index');
@@ -249,7 +249,7 @@ Route::middleware(['auth', 'supervisor.or.admin'])->prefix('admin')->name('admin
         Route::post('/mark-read', [AdminController::class, 'markNotificationRead'])->name('mark-read');
         Route::delete('/{notification}', [AdminController::class, 'deleteNotification'])->name('delete');
     });
-    
+
     // Gestion des messages clients
     Route::prefix('client-messages')->name('client-messages.')->group(function () {
         Route::get('/', [ClientChatController::class, 'index'])->name('index');
@@ -272,13 +272,13 @@ Route::middleware('auth')->prefix('api')->name('api.')->group(function () {
     Route::get('/dashboard-stats', [AdminController::class, 'getDashboardStats'])->name('dashboard-stats');
     Route::get('/agent-stats', [AgentController::class, 'statistics'])->name('agent-stats');
     Route::get('/balance-data', [BalanceController::class, 'getBalanceData'])->name('balance-data');
-    
+
     // Recherche et autocomplétion
     Route::get('/search/bills', [BillController::class, 'search'])->name('search.bills');
     Route::get('/search/payments', [PaymentController::class, 'search'])->name('search.payments');
     Route::get('/search/users', [AdminController::class, 'searchUsers'])->name('search.users');
     Route::get('/search/companies', [AdminController::class, 'searchCompanies'])->name('search.companies');
-    
+
     // Notifications
     Route::get('/notifications/unread', [AdminController::class, 'getUnreadNotifications'])->name('notifications.unread');
     Route::get('/chat/unread-count', [ChatController::class, 'getUnreadCount'])->name('chat.unread-count');

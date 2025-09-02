@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bill;
-use App\Models\Payment;
-use App\Models\Balance;
-use App\Models\Transaction;
-use App\Models\Company;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Bill;
+use App\Models\User;
+use App\Models\Balance;
+use App\Models\Company;
+use App\Models\Payment;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AgentController extends Controller
 {
@@ -27,21 +27,21 @@ class AgentController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        
+
         // Utiliser la vue unifiée des balances
         $balanceData = Balance::getUnifiedBalanceView();
         $todayBalance = Balance::getTodayBalance();
-        
+
         // Statistiques des factures
-        $bills = Bill::with(['company', 'user'])
+        $bills = Bill::with(['user'])
             ->orderBy('created_at', 'desc')
             ->paginate(20);
-        
+
         // Statistiques des paiements de l'agent pour aujourd'hui
         $todayPayments = Payment::where('agent_id', $user->id)
             ->whereDate('created_at', today())
             ->get();
-        
+
         $todayStats = [
             'payments_count' => $todayPayments->count(),
             'total_amount' => $todayPayments->sum('amount'),
@@ -50,14 +50,14 @@ class AgentController extends Controller
 
         // Dernières factures en attente
         $pendingBills = Bill::where('status', 'pending')
-            ->with(['company', 'user'])
+            ->with(['user'])
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get();
 
         // Mes derniers paiements
         $recentPayments = Payment::where('agent_id', $user->id)
-            ->with(['bill.company'])
+            ->with(['bill'])
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get();
@@ -67,7 +67,7 @@ class AgentController extends Controller
             'todayBalance',
             'balanceData',
             'todayStats',
-            'pendingBills', 
+            'pendingBills',
             'recentPayments'
         ));
     }
@@ -77,7 +77,7 @@ class AgentController extends Controller
      */
     public function bills(Request $request)
     {
-        $query = Bill::with(['company', 'user']);
+        $query = Bill::with(['user']);
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -92,9 +92,8 @@ class AgentController extends Controller
         }
 
         $bills = $query->orderBy('created_at', 'desc')->paginate(20);
-        $companies = Company::all();
 
-        return view('agent.bills.index', compact('bills', 'companies'));
+        return view('agent.bills.index', compact('bills'));
     }
 
     /**
@@ -122,8 +121,8 @@ class AgentController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        
-        $query = Payment::with(['bill.company', 'agent']);
+
+        $query = Payment::with(['bill', 'agent']);
 
         // Si c'est un agent simple, ne montrer que ses paiements
         if ($user->isAgent()) {
@@ -146,15 +145,15 @@ class AgentController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        
+
         $todayPayments = Payment::where('agent_id', $user->id)
             ->whereDate('created_at', today())
             ->get();
-            
+
         $monthPayments = Payment::where('agent_id', $user->id)
             ->whereMonth('created_at', Carbon::now()->month)
             ->get();
-        
+
         $stats = [
             'today' => [
                 'payments' => $todayPayments->count(),
