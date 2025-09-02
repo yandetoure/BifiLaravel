@@ -261,7 +261,6 @@
                 </div>
 
 
-
                 <div class="md:col-span-2">
                     <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Recherche</label>
                     <input type="text" name="search" id="search"
