@@ -60,21 +60,37 @@
                 </div>
 
                 {{-- Montants --}}
-                <div class="bg-gray-50 rounded-lg p-6 mb-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Récapitulatif des montants</h3>
+                <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 mb-6 border border-green-200">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                        Détail du montant payé
+                    </h3>
+
+                    {{-- Montant principal + frais mis en évidence --}}
+                    <div class="bg-white rounded-lg p-4 mb-4 border-2 border-green-300">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600 mb-1">Montant saisi + 1% de frais</p>
+                            <p class="text-3xl font-bold text-green-600">{{ number_format($payment->amount, 0, ',', ' ') }} + {{ number_format($payment->fees, 0, ',', ' ') }} FCFA</p>
+                            <p class="text-lg font-semibold text-gray-800 mt-1">= {{ number_format($payment->total, 0, ',', ' ') }} FCFA</p>
+                        </div>
+                    </div>
+
+                    {{-- Détail décomposé --}}
                     <div class="space-y-3">
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Montant:</span>
-                            <span class="font-medium">{{ number_format($payment->amount, 0, ',', ' ') }} FCFA</span>
+                        <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                            <span class="text-gray-700 font-medium">Montant de la facture:</span>
+                            <span class="font-semibold text-blue-700">{{ number_format($payment->amount, 0, ',', ' ') }} FCFA</span>
                         </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Frais:</span>
-                            <span class="font-medium">{{ number_format($payment->fees, 0, ',', ' ') }} FCFA</span>
+                        <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                            <span class="text-gray-700 font-medium">Frais de service (1%):</span>
+                            <span class="font-semibold text-orange-700">{{ number_format($payment->fees, 0, ',', ' ') }} FCFA</span>
                         </div>
-                        <div class="border-t pt-2">
-                            <div class="flex justify-between text-lg font-bold text-green-600">
-                                <span>Total payé:</span>
-                                <span>{{ number_format($payment->total, 0, ',', ' ') }} FCFA</span>
+                        <div class="border-t-2 border-green-300 pt-3">
+                            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                <span class="text-gray-800 font-bold text-lg">Total payé:</span>
+                                <span class="font-bold text-green-700 text-xl">{{ number_format($payment->total, 0, ',', ' ') }} FCFA</span>
                             </div>
                         </div>
                     </div>

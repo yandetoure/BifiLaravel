@@ -69,8 +69,19 @@
                     <div class="flex items-center p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
                         <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
                         <div>
-                            <p class="text-sm font-medium text-gray-600">Montant</p>
+                            <p class="text-sm font-medium text-gray-600">Montant de la facture</p>
                             <p class="text-2xl font-bold text-gray-900">{{ number_format($bill->amount, 0, ',', ' ') }} <span class="text-lg text-gray-600">FCFA</span></p>
+                            <p class="text-xs text-gray-500 mt-1">+ 1% de frais lors du paiement</p>
+                        </div>
+                    </div>
+
+                    {{-- Total à payer --}}
+                    <div class="flex items-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border-2 border-green-300">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Total à payer</p>
+                            <p class="text-3xl font-bold text-green-700">{{ number_format($bill->amount * 1.01, 0, ',', ' ') }} <span class="text-lg text-green-600">FCFA</span></p>
+                            <p class="text-xs text-gray-500 mt-1">Inclut les frais de 1%</p>
                         </div>
                     </div>
                 </div>
@@ -159,6 +170,10 @@
                         <div class="flex items-start">
                             <div class="w-2 h-2 bg-white rounded-full mr-3 mt-2"></div>
                             <span>Vous recevrez une notification dès que le statut change</span>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-2 h-2 bg-white rounded-full mr-3 mt-2"></div>
+                            <span>Lors du paiement, des <strong class="text-white">frais de 1%</strong> seront appliqués</span>
                         </div>
                         @auth
                         <div class="flex items-start">
