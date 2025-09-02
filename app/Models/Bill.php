@@ -40,10 +40,7 @@ class Bill extends Model
         'is_third_party_payment' => 'boolean',
     ];
 
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
+    // Relation company supprimée - utilisation de company_name à la place
 
     public function user()
     {
