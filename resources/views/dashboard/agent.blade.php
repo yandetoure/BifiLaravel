@@ -320,6 +320,9 @@
                                     @if($bill->user)
                                         <div class="text-sm font-medium text-gray-900">{{ $bill->user->name }}</div>
                                         <div class="text-sm text-gray-500">{{ $bill->user->email }}</div>
+                                    @elseif($bill->client_name)
+                                        <div class="text-sm font-medium text-gray-900">{{ $bill->client_name }}</div>
+                                        <div class="text-sm text-gray-500">Client externe</div>
                                     @else
                                         <span class="text-sm text-gray-500">Client anonyme</span>
                                     @endif

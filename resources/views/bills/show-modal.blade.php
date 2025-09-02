@@ -84,6 +84,23 @@
                     </td>
                 </tr>
             </table>
+        @elseif($bill->client_name)
+            <table class="table table-borderless">
+                <tr>
+                    <td class="fw-bold">Nom :</td>
+                    <td>{{ $bill->client_name }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">Numéro client :</td>
+                    <td>{{ $bill->client_number }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">Type de compte :</td>
+                    <td>
+                        <span class="badge bg-info">Client externe</span>
+                    </td>
+                </tr>
+            </table>
         @else
             <div class="alert alert-info">
                 <i class="fas fa-info-circle me-2"></i>

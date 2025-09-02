@@ -182,8 +182,13 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-blue-900 mb-2">Client anonyme</h3>
-                                <p class="text-blue-700">Cette facture a été soumise sans création de compte.</p>
+                                @if($bill->client_name)
+                                    <h3 class="text-lg font-bold text-blue-900 mb-2">{{ $bill->client_name }}</h3>
+                                    <p class="text-blue-700">Client externe - Numéro: {{ $bill->client_number }}</p>
+                                @else
+                                    <h3 class="text-lg font-bold text-blue-900 mb-2">Client anonyme</h3>
+                                    <p class="text-blue-700">Cette facture a été soumise sans création de compte.</p>
+                                @endif
                             </div>
                         </div>
                     </div>
