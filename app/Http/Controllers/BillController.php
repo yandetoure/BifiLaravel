@@ -29,6 +29,7 @@ class BillController extends Controller
 
         $data = $request->only(['company_name', 'bill_number', 'client_number', 'client_name', 'phone', 'amount']);
         $data['status'] = 'pending'; // Statut par défaut
+        $data['company_id'] = null; // Utiliser seulement company_name
 
         // Associer à l'utilisateur connecté s'il existe
         if (Auth::check()) {
