@@ -69,7 +69,7 @@
                     <p class="text-2xl font-semibold text-orange-600">{{ number_format($balanceData['orange_money_balance'], 0) }} FCFA</p>
                 </div>
             </div>
-            
+
             <!-- Informations additionnelles pour les agents -->
             <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="text-center p-4 bg-red-50 rounded-lg">
@@ -259,29 +259,19 @@
                         <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Annulées</option>
                     </select>
                 </div>
-                
-                <div>
-                    <label for="company" class="block text-sm font-medium text-gray-700 mb-2">Entreprise</label>
-                    <select name="company" id="company" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Toutes les entreprises</option>
-                        @foreach($bills->pluck('company')->unique() as $company)
-                            <option value="{{ $company->id }}" {{ request('company') == $company->id ? 'selected' : '' }}>
-                                {{ $company->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                
+
+
+
                 <div class="md:col-span-2">
                     <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Recherche</label>
-                    <input type="text" name="search" id="search" 
-                           placeholder="Rechercher par numéro de facture, client..." 
+                    <input type="text" name="search" id="search"
+                           placeholder="Rechercher par numéro de facture, client..."
                            value="{{ request('search') }}"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
-                
+
                 <div class="flex items-end">
-                    <button type="submit" 
+                    <button type="submit"
                             class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center">
                         <i class="fas fa-search mr-2"></i>Filtrer
                     </button>
@@ -300,7 +290,7 @@
                     {{ $bills->total() }} facture(s)
                 </span>
             </div>
-            
+
             <div class="overflow-x-auto">
                 @if($bills->count() > 0)
                     <table class="min-w-full divide-y divide-gray-200">
@@ -325,8 +315,8 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         @if($bill->company->logo)
-                                            <img src="{{ asset('storage/' . $bill->company->logo) }}" 
-                                                 alt="{{ $bill->company->name }}" 
+                                            <img src="{{ asset('storage/' . $bill->company->logo) }}"
+                                                 alt="{{ $bill->company->name }}"
                                                  class="h-8 w-8 rounded mr-3">
                                         @endif
                                         <span class="text-sm text-gray-900">{{ $bill->company->name }}</span>
@@ -372,12 +362,12 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex space-x-2">
-                                        <a href="{{ route('bills.show', $bill) }}" 
+                                        <a href="{{ route('bills.show', $bill) }}"
                                            class="text-blue-600 hover:text-blue-900">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         @if(!$bill->isPaid())
-                                            <a href="{{ route('payments.create', $bill) }}" 
+                                            <a href="{{ route('payments.create', $bill) }}"
                                                class="text-green-600 hover:text-green-900"
                                                title="Procéder au paiement">
                                                 <i class="fas fa-credit-card"></i>
@@ -397,7 +387,7 @@
                     </div>
                 @endif
             </div>
-            
+
             @if($bills->hasPages())
             <div class="px-6 py-4 border-t border-gray-200">
                 {{ $bills->links() }}
@@ -406,4 +396,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection
